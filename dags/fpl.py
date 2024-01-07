@@ -2,6 +2,8 @@ import datetime
 
 from airflow import DAG
 from airflow.providers.postgres.operators.postgres import PostgresOperator
+from airflow.operators.dummy_operator import DummyOperator
+
 
 DAG_ID = "fpl_elt"
 
@@ -12,6 +14,7 @@ with DAG(
     catchup=False,
     template_searchpath=["templates/CREATIONS", "rendered_templates"],
 ) as dag:
+    start_operator = DummyOperator(task_id="begin_execution")
     create_teams_table = PostgresOperator(
         task_id="create_teams_table",
         sql="teams.sql",
@@ -23,4 +26,4 @@ with DAG(
         postgres_conn_id="airflow_pg_cnx",
     )
 
-    create_teams_table >> populate_teams_table
+    start_operator >> create_teams_table >> populate_teams_table
