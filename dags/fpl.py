@@ -1,5 +1,5 @@
-import os
 import datetime
+
 from airflow import DAG
 from airflow.providers.postgres.operators.postgres import PostgresOperator
 
