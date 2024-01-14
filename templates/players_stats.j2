@@ -1,0 +1,5 @@
+INSERT INTO players_stats (game_id, player_id, stat_identifier, stat_value) VALUES
+{% for row in data -%}
+    ({{ row['game_id'] }}, {{ row['player_id']}}, '{{ row['stat_identifier']}}', {{row['stat_value']}}){% if not loop.last %},{% endif %}
+{% endfor -%}
+

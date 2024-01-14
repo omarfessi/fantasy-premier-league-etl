@@ -70,6 +70,17 @@ with DAG(
         },
         provide_context=True,
     )
+    render_players_stats_template_task = PythonOperator(
+        task_id="render_template_for_players_stats",
+        python_callable=render_template,
+        op_kwargs={
+            "searchpath": "templates",
+            "template_path": "players_stats.j2",
+            "rendered_sql": "rendered_templates/players_stats/rendered.sql",
+            "transformation_entity": "players_stats",
+        },
+        provide_context=True,
+    )
     populate_datetime_table = PostgresOperator(
         task_id="populate_datetime_table",
         sql="datetime/rendered.sql",
@@ -94,6 +105,12 @@ with DAG(
         postgres_conn_id=POSTGRES_CONN_ID,
     )
 
+    populate_players_stats_table = PostgresOperator(
+        task_id="populate_players_stats_table",
+        sql="players_stats/rendered.sql",
+        postgres_conn_id=POSTGRES_CONN_ID,
+    )
+
     (
         start_operator
         >> create_all_tables
@@ -101,8 +118,10 @@ with DAG(
         >> render_teams_template_task
         >> render_players_template_task
         >> render_games_results_template_task
+        >> render_players_stats_template_task
         >> populate_datetime_table
         >> populate_teams_table
         >> populate_players_table
         >> populate_games_results_table
+        >> populate_players_stats_table
     )

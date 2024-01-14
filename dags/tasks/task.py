@@ -72,6 +72,23 @@ def transform_games_results(response):
     return data
 
 
+def transform_players_stats(response):
+    data = []
+    finished_games = [fixture for fixture in response.json() if fixture["finished"]]
+    for game in finished_games:
+        for stat in game["stats"]:
+            for stat_detail in stat["a"] + stat["h"]:
+                data.append(
+                    {
+                        "game_id": game["id"],
+                        "player_id": stat_detail["element"],
+                        "stat_identifier": stat["identifier"],
+                        "stat_value": stat_detail["value"],
+                    },
+                )
+    return data
+
+
 def render_template(**kwargs):
     static_response = call_api(BOOTSTRAP_STATIC_URL)
     fixtures_response = call_api(FIXTURES_URL)
@@ -84,7 +101,8 @@ def render_template(**kwargs):
         data = transform_datetime(fixtures_response)
     elif kwargs["transformation_entity"] == "games_results":
         data = transform_games_results(fixtures_response)
-
+    elif kwargs["transformation_entity"] == "players_stats":
+        data = transform_players_stats(fixtures_response)
     templateEnv = initialize_template_environment(searchpath=kwargs["searchpath"])
     template = templateEnv.get_template(kwargs["template_path"])
     outputText = template.render(data=data)

@@ -42,10 +42,20 @@ CREATE table IF NOT exists public.games_results(
    PRIMARY KEY(id)
 );"""
 
+players_stats = """
+CREATE table IF NOT exists public.players_stats(
+   id SERIAL PRIMARY key,
+   game_id INTEGER REFERENCES games_results (id),
+   player_id INTEGER NOT null REFERENCES players (id),
+   stat_identifier VARCHAR(25) NOT NULL,
+   stat_value INTEGER NOT null
+);"""
+
 
 create_all_tables_statement = [
     datetime_table,
     teams_table,
     players_table,
     games_results,
+    players_stats,
 ]
