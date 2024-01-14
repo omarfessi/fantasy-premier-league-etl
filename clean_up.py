@@ -17,11 +17,35 @@ except psycopg2.Error as e:
 
 conn.set_session(autocommit=True)
 
+
+try:
+    cur.execute("DROP TABLE IF EXISTS public.games_results;")
+    print("Table 'games_results' dropped successfully.")
+except psycopg2.Error as e:
+    print("Error: Unable to drop the 'games_results' table")
+    print(e)
+
+try:
+    cur.execute("DROP TABLE IF EXISTS public.datetime;")
+    print("Table 'datetime' dropped successfully.")
+except psycopg2.Error as e:
+    print("Error: Unable to drop the 'datetime' table")
+    print(e)
+
+
+try:
+    cur.execute("DROP TABLE IF EXISTS public.players;")
+    print("Table 'players' dropped successfully.")
+except psycopg2.Error as e:
+    print("Error: Unable to drop the 'players' table")
+    print(e)
+
 try:
     cur.execute("DROP TABLE IF EXISTS public.teams;")
     print("Table 'teams' dropped successfully.")
 except psycopg2.Error as e:
     print("Error: Unable to drop the 'teams' table")
     print(e)
+
 
 conn.close()

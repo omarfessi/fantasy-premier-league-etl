@@ -1,0 +1,5 @@
+INSERT INTO games_results (id, team_h, team_a, kickoff_time, team_h_score, team_a_score) VALUES
+{% for row in data -%}
+    ({{ row['id'] }}, {{ row['team_h']}}, {{ row['team_a']}}, TIMESTAMP '{{row['kickoff_time']}}', {{ row['team_h_score']}}, {{ row['team_a_score']}}){% if not loop.last %},{% endif %}
+{% endfor -%}
+ON CONFLICT (id) DO NOTHING
