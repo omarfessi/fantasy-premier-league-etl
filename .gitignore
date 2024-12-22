@@ -1,6 +1,9 @@
 logs/
 rendered_templates/
+__pycache__
 dags/__pycache__
 dags/tasks/__pycache__
 plugins/__pycache__
 plugins/operators/__pycache__
+.fpl/
+ingestion/__pycache__
