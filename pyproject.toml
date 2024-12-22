@@ -15,8 +15,26 @@ authors = [
 description = "An end to end data pipeline to help fpl managers to make decisions based on data"
 readme = "README.md"
 
-[tool.isort]
-profile = "black"
-multi_line_output = "VERTICAL_HANGING_INDENT"
-force_grid_wrap = 2
+[tool.ruff]
+# Set the maximum line length to 79.
 line_length = 119
+
+
+[tool.ruff.lint]
+select = [
+    # pycodestyle
+    "E",
+    # Pyflakes
+    "F",
+    # pyupgrade
+    "UP",
+    # flake8-bugbear
+    "B",
+    # flake8-simplify
+    "SIM",
+    # isort
+    "I",
+]
+
+[tool.ruff.lint.pydocstyle]
+convention = "google"
