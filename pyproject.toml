@@ -17,7 +17,7 @@ readme = "README.md"
 
 [tool.ruff]
 # Set the maximum line length to 79.
-line_length = 119
+line-length = 119
 
 
 [tool.ruff.lint]
