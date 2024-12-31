@@ -1,6 +1,7 @@
 from datetime import datetime
 from typing import Annotated, Literal
 
+import pyarrow as pa
 from pydantic import BaseModel, BeforeValidator, ConfigDict, Field
 
 
@@ -15,6 +16,23 @@ class Team(BaseModel):
     strength_attack_away: int
     strength_defence_home: int
     strength_defence_away: int
+
+    @classmethod
+    def pyarrow_schema(cls):
+        return pa.schema(
+            [
+                ("id", pa.int32()),
+                ("name", pa.string()),
+                ("short_name", pa.string()),
+                ("strength", pa.int32()),
+                ("strength_overall_home", pa.int32()),
+                ("strength_overall_away", pa.int32()),
+                ("strength_attack_home", pa.int32()),
+                ("strength_attack_away", pa.int32()),
+                ("strength_defence_home", pa.int32()),
+                ("strength_defence_away", pa.int32()),
+            ]
+        )
 
 
 class Player(BaseModel):
@@ -62,6 +80,52 @@ class Player(BaseModel):
     transfers_out_event: int
     model_config = ConfigDict(extra="ignore")
 
+    @classmethod
+    def pyarrow_schema(cls):
+        return pa.schema(
+            [
+                ("id", pa.int32()),
+                ("first_name", pa.string()),
+                ("second_name", pa.string()),
+                ("web_name", pa.string()),
+                ("position", pa.int8()),
+                ("team_id", pa.int32()),
+                ("cost", pa.float32()),
+                ("minutes", pa.int32()),
+                ("goals_scored", pa.int32()),
+                ("assists", pa.int32()),
+                ("clean_sheets", pa.int32()),
+                ("goals_conceded", pa.int32()),
+                ("own_goals", pa.int32()),
+                ("penalties_saved", pa.int32()),
+                ("penalties_missed", pa.int32()),
+                ("yellow_cards", pa.int32()),
+                ("red_cards", pa.int32()),
+                ("saves", pa.int32()),
+                ("bonus", pa.int32()),
+                ("bps", pa.int32()),
+                ("influence", pa.float32()),
+                ("creativity", pa.float32()),
+                ("threat", pa.float32()),
+                ("ict_index", pa.float32()),
+                ("starts", pa.int32()),
+                ("now_cost_rank", pa.int32()),
+                ("now_cost_rank_type", pa.int32()),
+                ("form_rank", pa.int32()),
+                ("form_rank_type", pa.int32()),
+                ("points_per_game_rank", pa.int32()),
+                ("points_per_game_rank_type", pa.int32()),
+                ("selected_rank", pa.int32()),
+                ("selected_rank_type", pa.int32()),
+                ("selected_by_percent", pa.float32()),
+                ("total_points", pa.int32()),
+                ("transfers_in", pa.int32()),
+                ("transfers_in_event", pa.int32()),
+                ("transfers_out", pa.int32()),
+                ("transfers_out_event", pa.int32()),
+            ]
+        )
+
 
 class TopElementInfo(BaseModel):
     id: int
@@ -89,6 +153,46 @@ class Event(BaseModel):
     transfers_made: int | None
     most_captained: int | None
     most_vice_captained: int | None
+
+    @classmethod
+    def pyarrow_schema(cls):
+        return pa.schema(
+            [
+                ("id", pa.int32()),
+                ("gameweek", pa.string()),
+                ("average_fplmanager_score", pa.int32()),
+                ("highest_fplmanager_score", pa.int32()),
+                ("highest_scoring_fplmanager_id", pa.int32()),
+                ("fplmanagers_count", pa.int32()),
+                ("data_checked", pa.bool_()),
+                ("event_date", pa.timestamp("s")),
+                (
+                    "chips_played",
+                    pa.list_(
+                        pa.struct(
+                            [
+                                ("chip_name", pa.string()),
+                                ("num_played", pa.int32()),
+                            ]
+                        )
+                    ),
+                ),
+                ("most_selected_player", pa.int32()),
+                ("most_transferred_player_in", pa.int32()),
+                (
+                    "top_player_info",
+                    pa.struct(
+                        [
+                            ("id", pa.int32()),
+                            ("points", pa.int32()),
+                        ]
+                    ),
+                ),
+                ("transfers_made", pa.int32()),
+                ("most_captained", pa.int32()),
+                ("most_vice_captained", pa.int32()),
+            ]
+        )
 
 
 class StatEntry(BaseModel):
@@ -120,3 +224,58 @@ class Fixture(BaseModel):
     team_h_difficulty: int
     team_a_difficulty: int
     pulse_id: int
+
+    @classmethod
+    def pyarrow_schema(cls):
+        return pa.schema(
+            [
+                ("code", pa.int32()),
+                ("event", pa.int32()),
+                ("finished", pa.bool_()),
+                ("finished_provisional", pa.bool_()),
+                ("id", pa.int32()),
+                ("kickoff_time", pa.timestamp("s")),
+                ("minutes", pa.int32()),
+                ("provisional_start_time", pa.bool_()),
+                ("started", pa.bool_()),
+                ("team_a", pa.int32()),
+                ("team_a_score", pa.int32()),
+                ("team_h", pa.int32()),
+                ("team_h_score", pa.int32()),
+                (
+                    "stats",
+                    pa.list_(
+                        pa.struct(
+                            [
+                                ("identifier", pa.string()),
+                                (
+                                    "a",
+                                    pa.list_(
+                                        pa.struct(
+                                            [
+                                                ("value", pa.int32()),
+                                                ("element", pa.int32()),
+                                            ]
+                                        )
+                                    ),
+                                ),
+                                (
+                                    "h",
+                                    pa.list_(
+                                        pa.struct(
+                                            [
+                                                ("value", pa.int32()),
+                                                ("element", pa.int32()),
+                                            ]
+                                        )
+                                    ),
+                                ),
+                            ]
+                        )
+                    ),
+                ),
+                ("team_h_difficulty", pa.int32()),
+                ("team_a_difficulty", pa.int32()),
+                ("pulse_id", pa.int32()),
+            ]
+        )
