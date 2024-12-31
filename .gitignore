@@ -7,3 +7,5 @@ plugins/__pycache__
 plugins/operators/__pycache__
 .fpl/
 ingestion/__pycache__
+ingestion/*.parquet
+ingestion/*.db
