@@ -279,3 +279,6 @@ class Fixture(BaseModel):
                 ("pulse_id", pa.int32()),
             ]
         )
+
+
+ModelUnion = Event | Team | Player | Fixture
