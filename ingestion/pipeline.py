@@ -23,7 +23,11 @@ def process_entity(entity_name: str, url: str, model: ModelUnion, filename: str)
     logging.info(f"Processing {entity_name}...")
     data = call_api(url).json()
     if isinstance(data, dict):
-        data = data.get(entity_name, [])
+        try:
+            data = data[entity_name]
+        except KeyError:
+            logging.error(f"Key '{entity_name}' is missing from the API response.")
+            return
     validated_data = extract_and_validate_entities(data, model)
     serialized_data = [data.model_dump() for data in validated_data]
     table = pa.Table.from_pylist(serialized_data, schema=model.pyarrow_schema())
@@ -32,7 +36,6 @@ def process_entity(entity_name: str, url: str, model: ModelUnion, filename: str)
 
 
 if __name__ == "__main__":
-
     for entity in [
         ("fixtures", FIXTURES_URL, Fixture, "fixtures.parquet"),
         ("players", STATIC_URL, Player, "players.parquet"),

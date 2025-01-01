@@ -1,8 +1,9 @@
 import logging
 
 import requests
-from models import ModelUnion
 from pydantic import ValidationError
+
+from .models import ModelUnion
 
 
 def call_api(bootstrap_static_url: str) -> requests.models.Response:
@@ -15,14 +16,11 @@ def call_api(bootstrap_static_url: str) -> requests.models.Response:
     Returns:
         requests.models.Response: The response object from the GET request.
     """
-    payload = {}
-    headers = {}
-    response = requests.request(
-        "GET", bootstrap_static_url, headers=headers, data=payload
-    )
+    response = requests.request("GET", bootstrap_static_url)
     if response.status_code != 200:
-        logging.error(
-            f"Failed to fetch data from {bootstrap_static_url} with status code: {response.status_code}"
+        raise requests.exceptions.RequestException(
+            f"Failed to fetch data from {bootstrap_static_url} with status code: {response.status_code}, \
+                ingestion pipeline failed."
         )
     return response
 
@@ -41,9 +39,10 @@ def extract_and_validate_entities(
         List[ModelUnion]: Validated data and log a List of error messages.
     """
     data = []
-    errors = []
     if not entities:
-        logging.error(f"No data found for {model_type.__name__.lower()}")
+        logging.warning(f"No data found for {model_type.__name__.lower()}")
+        return data
+    errors = []
     for entity in entities:
         try:
             data.append(model_type(**entity))
@@ -52,6 +51,8 @@ def extract_and_validate_entities(
                 f"Failed to validate {model_type.__name__.lower()}: {entity} with error: {e}"
             )
     if errors:
-        error_message = "\n".join(errors)
-        logging.warning(error_message)
+        logging.warning(
+            f"Validation completed with {len(errors)} errors for {model_type.__name__.lower()}.\n"
+            f"Errors:\n{'\n'.join(errors)}"
+        )
     return data
