@@ -234,7 +234,7 @@ class Fixture(BaseModel):
                 ("finished", pa.bool_()),
                 ("finished_provisional", pa.bool_()),
                 ("id", pa.int32()),
-                ("kickoff_time", pa.timestamp("s")),
+                ("kickoff_time", pa.timestamp("ms")),
                 ("minutes", pa.int32()),
                 ("provisional_start_time", pa.bool_()),
                 ("started", pa.bool_()),

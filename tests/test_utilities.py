@@ -30,7 +30,7 @@ def test_call_api_failure():
         assert (
             exc_info.value.args[0]
             == f"Failed to fetch data from {url} with status code: {mock_request.return_value.status_code}, \
-                   ingestion pipeline failed."
+                ingestion pipeline failed."
         )
 
 
