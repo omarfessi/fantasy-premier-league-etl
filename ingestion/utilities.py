@@ -74,7 +74,6 @@ class TableLoadingBuffer:
         self.dryrun = dryrun
         self.chunk_size = chunk_size
         self.conn = self.initialize_connection(destination)
-        self.total_inserted = 0
 
     def initialize_connection(self, destination: str) -> duckdb.DuckDBPyConnection:
         if destination == "md":
@@ -98,16 +97,15 @@ class TableLoadingBuffer:
             self.conn.execute(
                 duckdb_schema
             )  # Create table in duckdb if not exists using it's schema
+            total_inserted = 0
             total_rows = table.num_rows
             for batch_start in range(0, total_rows, self.chunk_size):
                 batch_end = min(batch_start + self.chunk_size, total_rows)
                 chunk = table.slice(batch_start, batch_end - batch_start)
                 self.insert_chunk(chunk, table_name)
                 logging.info(f"Inserted chunk {batch_start} to {batch_end}")
-            self.total_inserted += total_rows
-            logging.info(
-                f"Total inserted into {table_name}: {self.total_inserted} rows"
-            )
+            total_inserted += total_rows
+            logging.info(f"Total inserted into {table_name}: {total_inserted} rows")
 
     def insert_chunk(self, chunk: pa.Table, table_name: str) -> None:
         # DuckDB does not recognize the syntax used to query a

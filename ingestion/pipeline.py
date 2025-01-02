@@ -46,7 +46,7 @@ def process_entity(
 if __name__ == "__main__":
     for entity in [
         ("fixtures", FIXTURES_URL, Fixture, "fixtures.parquet"),
-        ("players", STATIC_URL, Player, "players.parquet"),
+        ("elements", STATIC_URL, Player, "players.parquet"),
         ("events", STATIC_URL, Event, "events.parquet"),
         ("teams", STATIC_URL, Team, "teams.parquet"),
     ]:
