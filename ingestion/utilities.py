@@ -1,5 +1,8 @@
 import logging
+import os
 
+import duckdb
+import pyarrow as pa
 import requests
 from pydantic import ValidationError
 
@@ -56,3 +59,74 @@ def extract_and_validate_entities(
             f"Errors:\n{'\n'.join(errors)}"
         )
     return data
+
+
+class TableLoadingBuffer:
+    def __init__(
+        self,
+        database_name: str = "fpl",
+        destination="local",
+        dryrun: bool = False,
+        chunk_size: int = 50000,
+    ) -> None:
+        self.database_name = database_name
+        self.destination = destination
+        self.dryrun = dryrun
+        self.chunk_size = chunk_size
+        self.conn = self.initialize_connection(destination)
+        self.total_inserted = 0
+
+    def initialize_connection(self, destination: str) -> duckdb.DuckDBPyConnection:
+        if destination == "md":
+            logging.info("Connecting to MotherDuck...")
+            if not os.environ.get("MOTHERDUCK_TOKEN"):
+                raise ValueError(
+                    "MotherDuck token is required. Set the environment variable 'MOTHERDUCK_TOKEN'."
+                )
+            conn = duckdb.connect("md:")
+            conn.execute(f"CREATE DATABASE IF NOT EXISTS {self.database_name}")
+            conn.execute(f"USE {self.database_name}")
+        else:
+            conn = duckdb.connect(database=f"{self.database_name}.db")
+        return conn
+
+    def insert_table(
+        self, table_name: str, table: pa.Table, duckdb_schema: str
+    ) -> None:
+        if not self.dryrun:
+            logging.info(f"executing {duckdb_schema}")
+            self.conn.execute(
+                duckdb_schema
+            )  # Create table in duckdb if not exists using it's schema
+            total_rows = table.num_rows
+            for batch_start in range(0, total_rows, self.chunk_size):
+                batch_end = min(batch_start + self.chunk_size, total_rows)
+                chunk = table.slice(batch_start, batch_end - batch_start)
+                self.insert_chunk(chunk, table_name)
+                logging.info(f"Inserted chunk {batch_start} to {batch_end}")
+            self.total_inserted += total_rows
+            logging.info(
+                f"Total inserted into {table_name}: {self.total_inserted} rows"
+            )
+
+    def insert_chunk(self, chunk: pa.Table, table_name: str) -> None:
+        # DuckDB does not recognize the syntax used to query a
+        # PyArrow Table directly through
+        # INSERT INTO with SELECT * FROM pyarrow.Table.
+        # Specifically, the column schema details, including the colon (:) notation,
+        # sappear when you're using pyarrow.Table objects directly.
+        self.conn.register("buffer_table", chunk)
+        insert_query = f"INSERT INTO {table_name} SELECT * FROM buffer_table;"
+        logging.info(f"Inserting chunk into {table_name} using query: {insert_query}")
+        self.conn.execute(insert_query)
+        self.conn.unregister("buffer_table")
+
+    def close_connection(self) -> None:
+        """
+        Close the DuckDB connection to release resources.
+        """
+        if self.conn:
+            logging.info("Closing DuckDB connection.")
+            self.conn.close()
+            self.conn = None
+            logging.info("DuckDB connection closed.")

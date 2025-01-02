@@ -34,6 +34,22 @@ class Team(BaseModel):
             ]
         )
 
+    @classmethod
+    def duckdb_schema(cls):
+        return """
+        CREATE TABLE teams (
+            id INTEGER PRIMARY KEY,
+            name VARCHAR,
+            short_name VARCHAR,
+            strength INTEGER,
+            strength_overall_home INTEGER,
+            strength_overall_away INTEGER,
+            strength_attack_home INTEGER,
+            strength_attack_away INTEGER,
+            strength_defence_home INTEGER,
+            strength_defence_away INTEGER
+        );"""
+
 
 class Player(BaseModel):
     id: int
@@ -126,6 +142,51 @@ class Player(BaseModel):
             ]
         )
 
+    @classmethod
+    def duckdb_schema(cls):
+        return """
+        CREATE TABLE players (
+            id INTEGER PRIMARY KEY,
+            first_name VARCHAR,
+            second_name VARCHAR,
+            web_name VARCHAR,
+            position INTEGER,
+            team_id INTEGER,
+            cost FLOAT,
+            minutes INTEGER,
+            goals_scored INTEGER,
+            assists INTEGER,
+            clean_sheets INTEGER,
+            goals_conceded INTEGER,
+            own_goals INTEGER,
+            penalties_saved INTEGER,
+            penalties_missed INTEGER,
+            yellow_cards INTEGER,
+            red_cards INTEGER,
+            saves INTEGER,
+            bonus INTEGER,
+            bps INTEGER,
+            influence FLOAT,
+            creativity FLOAT,
+            threat FLOAT,
+            ict_index FLOAT,
+            starts INTEGER,
+            now_cost_rank INTEGER,
+            now_cost_rank_type INTEGER,
+            form_rank INTEGER,
+            form_rank_type INTEGER,
+            points_per_game_rank INTEGER,
+            points_per_game_rank_type INTEGER,
+            selected_rank INTEGER,
+            selected_rank_type INTEGER,
+            selected_by_percent FLOAT,
+            total_points INTEGER,
+            transfers_in INTEGER,
+            transfers_in_event INTEGER,
+            transfers_out INTEGER,
+            transfers_out_event INTEGER
+        );"""
+
 
 class TopElementInfo(BaseModel):
     id: int
@@ -193,6 +254,33 @@ class Event(BaseModel):
                 ("most_vice_captained", pa.int32()),
             ]
         )
+
+    @classmethod
+    def duckdb_schema(cls):
+        return """
+        CREATE TABLE events (
+        id INTEGER,
+        gameweek VARCHAR,
+        average_fplmanager_score INTEGER,
+        highest_fplmanager_score INTEGER,
+        highest_scoring_fplmanager_id INTEGER,
+        fplmanagers_count INTEGER,
+        data_checked BOOLEAN,
+        event_date TIMESTAMP,
+        chips_played STRUCT(
+            chip_name VARCHAR,
+            num_played INTEGER
+        )[],
+        most_selected_player INTEGER,
+        most_transferred_player_in INTEGER,
+        top_player_info STRUCT(
+            id INTEGER,
+            points INTEGER
+        ),
+        transfers_made INTEGER,
+        most_captained INTEGER,
+        most_vice_captained INTEGER
+    );"""
 
 
 class StatEntry(BaseModel):
@@ -279,6 +367,39 @@ class Fixture(BaseModel):
                 ("pulse_id", pa.int32()),
             ]
         )
+
+    @classmethod
+    def duckdb_schema(cls):
+        return """
+        CREATE TABLE fixtures (
+            code INTEGER,
+            event INTEGER,
+            finished BOOLEAN,
+            finished_provisional BOOLEAN,
+            id INTEGER PRIMARY KEY,
+            kickoff_time TIMESTAMP,
+            minutes INTEGER,
+            provisional_start_time BOOLEAN,
+            started BOOLEAN,
+            team_a INTEGER,
+            team_a_score INTEGER,
+            team_h INTEGER,
+            team_h_score INTEGER,
+            stats STRUCT(
+                identifier VARCHAR,
+                a STRUCT(
+                    "value" INTEGER,
+                    element INTEGER
+                )[],
+                h STRUCT(
+                    "value" INTEGER,
+                    element INTEGER
+                )[]
+            )[],
+            team_h_difficulty INTEGER,
+            team_a_difficulty INTEGER,
+            pulse_id INTEGER
+        );"""
 
 
 ModelUnion = Event | Team | Player | Fixture
