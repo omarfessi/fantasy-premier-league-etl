@@ -16,6 +16,7 @@ class Team(BaseModel):
     strength_attack_away: int
     strength_defence_home: int
     strength_defence_away: int
+    ingestion_time: date = Field(default_factory=lambda: date.today())
 
     @classmethod
     def pyarrow_schema(cls):
@@ -31,6 +32,7 @@ class Team(BaseModel):
                 ("strength_attack_away", pa.int32()),
                 ("strength_defence_home", pa.int32()),
                 ("strength_defence_away", pa.int32()),
+                ("ingestion_time", pa.date32()),
             ]
         )
 
@@ -47,7 +49,8 @@ class Team(BaseModel):
             strength_attack_home INTEGER,
             strength_attack_away INTEGER,
             strength_defence_home INTEGER,
-            strength_defence_away INTEGER
+            strength_defence_away INTEGER,
+            ingestion_time DATE
         );"""
 
 
@@ -94,6 +97,7 @@ class Player(BaseModel):
     transfers_in_event: int
     transfers_out: int
     transfers_out_event: int
+    ingestion_time: date = Field(default_factory=lambda: date.today())
     model_config = ConfigDict(extra="ignore")
 
     @classmethod
@@ -139,6 +143,7 @@ class Player(BaseModel):
                 ("transfers_in_event", pa.int32()),
                 ("transfers_out", pa.int32()),
                 ("transfers_out_event", pa.int32()),
+                ("ingestion_time", pa.date32()),
             ]
         )
 
@@ -184,7 +189,8 @@ class Player(BaseModel):
             transfers_in INTEGER,
             transfers_in_event INTEGER,
             transfers_out INTEGER,
-            transfers_out_event INTEGER
+            transfers_out_event INTEGER,
+            ingestion_time DATE
         );"""
 
 
@@ -214,6 +220,7 @@ class Event(BaseModel):
     transfers_made: int | None
     most_captained: int | None
     most_vice_captained: int | None
+    ingestion_time: date = Field(default_factory=lambda: date.today())
 
     @classmethod
     def pyarrow_schema(cls):
@@ -252,6 +259,7 @@ class Event(BaseModel):
                 ("transfers_made", pa.int32()),
                 ("most_captained", pa.int32()),
                 ("most_vice_captained", pa.int32()),
+                ("ingestion_time", pa.date32()),
             ]
         )
 
@@ -279,7 +287,8 @@ class Event(BaseModel):
         ),
         transfers_made INTEGER,
         most_captained INTEGER,
-        most_vice_captained INTEGER
+        most_vice_captained INTEGER,
+        ingestion_time DATE
     );"""
 
 
