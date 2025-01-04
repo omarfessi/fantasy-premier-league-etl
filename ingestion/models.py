@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import date, datetime
 from typing import Annotated, Literal
 
 import pyarrow as pa
@@ -312,6 +312,7 @@ class Fixture(BaseModel):
     team_h_difficulty: int
     team_a_difficulty: int
     pulse_id: int
+    ingestion_time: date = Field(default_factory=lambda: date.today())
 
     @classmethod
     def pyarrow_schema(cls):
@@ -365,6 +366,7 @@ class Fixture(BaseModel):
                 ("team_h_difficulty", pa.int32()),
                 ("team_a_difficulty", pa.int32()),
                 ("pulse_id", pa.int32()),
+                ("ingestion_time", pa.date32()),
             ]
         )
 
@@ -398,7 +400,8 @@ class Fixture(BaseModel):
             )[],
             team_h_difficulty INTEGER,
             team_a_difficulty INTEGER,
-            pulse_id INTEGER
+            pulse_id INTEGER,
+            ingestion_time DATE
         );"""
 
 

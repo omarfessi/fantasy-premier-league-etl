@@ -3,8 +3,8 @@ from unittest.mock import patch
 
 import pytest
 import requests
-from pydantic import BaseModel
 
+from ingestion.models import Fixture
 from ingestion.utilities import call_api, extract_and_validate_entities
 
 
@@ -34,35 +34,35 @@ def test_call_api_failure():
         )
 
 
-class MockModel(BaseModel):
-    id: int
-    name: str
-
-
-def test_extract_and_validate_entities_success():
-    entities = [{"id": 1, "name": "Entity1"}, {"id": 2, "name": "Entity2"}]
-    validated_entities = extract_and_validate_entities(entities, MockModel)
-    assert len(validated_entities) == 2
-    assert validated_entities[0].id == 1
-    assert validated_entities[0].name == "Entity1"
-    assert validated_entities[1].id == 2
-    assert validated_entities[1].name == "Entity2"
-
-
-def test_extract_and_validate_entities_validation_error(caplog):
-    entities = [{"id": 1, "name": "Entity1"}, {"id": "invalid_id", "name": "Entity2"}]
+def test_extract_and_validate_entities_succeeds(caplog, valid_fixtures_raw_data):
     with caplog.at_level(logging.WARNING):
-        validated_entities = extract_and_validate_entities(entities, MockModel)
-    assert len(validated_entities) == 1
-    assert validated_entities[0].id == 1
-    assert validated_entities[0].name == "Entity1"
-    assert "Validation completed with 1 errors for mockmodel" in caplog.text
-    print(caplog.text)
+        validated_entities = extract_and_validate_entities(
+            valid_fixtures_raw_data, Fixture
+        )
+    assert len(validated_entities) == 2
+    assert (
+        f"Validation completed with 1 errors for {Fixture.__name__.lower()}"
+        not in caplog.text
+    )
+
+
+def test_extract_and_validate_entities_raises_validation_error(
+    caplog, invalid_fixtures_raw_data
+):
+    with caplog.at_level(logging.WARNING):
+        validated_entities = extract_and_validate_entities(
+            invalid_fixtures_raw_data, Fixture
+        )
+    assert len(validated_entities) == 0
+    assert (
+        f"Validation completed with {len(invalid_fixtures_raw_data)} errors for {Fixture.__name__.lower()}"
+        in caplog.text
+    )
 
 
 def test_extract_and_validate_entities_empty_list(caplog):
     entities = []
     with caplog.at_level(logging.WARNING):
-        validated_entities = extract_and_validate_entities(entities, MockModel)
+        validated_entities = extract_and_validate_entities(entities, Fixture)
     assert validated_entities == []
-    assert "No data found for mockmodel" in caplog.text
+    assert f"No data found for {Fixture.__name__.lower()}" in caplog.text
