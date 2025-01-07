@@ -16,7 +16,6 @@ description = "An end to end data pipeline to help fpl managers to make decision
 readme = "README.md"
 
 [tool.ruff]
-# Set the maximum line length to 79.
 line-length = 119
 
 

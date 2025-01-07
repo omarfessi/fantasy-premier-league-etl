@@ -28,9 +28,7 @@ def call_api(bootstrap_static_url: str) -> requests.models.Response:
     return response
 
 
-def extract_and_validate_entities(
-    entities: list[dict], model_type: ModelUnion
-) -> list[ModelUnion]:
+def extract_and_validate_entities(entities: list[dict], model_type: ModelUnion) -> list[ModelUnion]:
     """
     Extract and validate entities using a specified Pydantic model.
 
@@ -50,9 +48,7 @@ def extract_and_validate_entities(
         try:
             data.append(model_type(**entity))
         except ValidationError as e:
-            errors.append(
-                f"Failed to validate {model_type.__name__.lower()}: {entity} with error: {e}"
-            )
+            errors.append(f"Failed to validate {model_type.__name__.lower()}: {entity} with error: {e}")
     if errors:
         logging.warning(
             f"Validation completed with {len(errors)} errors for {model_type.__name__.lower()}.\n"
@@ -79,9 +75,7 @@ class TableLoadingBuffer:
         if destination == "md":
             logging.info("Connecting to MotherDuck...")
             if not os.environ.get("MOTHERDUCK_TOKEN"):
-                raise ValueError(
-                    "MotherDuck token is required. Set the environment variable 'MOTHERDUCK_TOKEN'."
-                )
+                raise ValueError("MotherDuck token is required. Set the environment variable 'MOTHERDUCK_TOKEN'.")
             conn = duckdb.connect("md:")
             conn.execute(f"CREATE DATABASE IF NOT EXISTS {self.database_name}")
             conn.execute(f"USE {self.database_name}")
@@ -89,14 +83,10 @@ class TableLoadingBuffer:
             conn = duckdb.connect(database=f"{self.database_name}.db")
         return conn
 
-    def insert_table(
-        self, table_name: str, table: pa.Table, duckdb_schema: str
-    ) -> None:
+    def insert_table(self, table_name: str, table: pa.Table, duckdb_schema: str) -> None:
         if not self.dryrun:
-            logging.info(f"executing {duckdb_schema}")
-            self.conn.execute(
-                duckdb_schema
-            )  # Create table in duckdb if not exists using it's schema
+            logging.info(f"creating table {table_name} in {self.database_name} if not exists")
+            self.conn.execute(duckdb_schema)  # Create table in duckdb if not exists using it's schema
             total_inserted = 0
             total_rows = table.num_rows
             for batch_start in range(0, total_rows, self.chunk_size):

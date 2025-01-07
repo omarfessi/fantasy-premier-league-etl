@@ -39,8 +39,8 @@ class Team(BaseModel):
     @classmethod
     def duckdb_schema(cls):
         return """
-        CREATE TABLE teams (
-            id INTEGER PRIMARY KEY,
+        CREATE TABLE IF NOT EXISTS teams (
+            id INTEGER,
             name VARCHAR,
             short_name VARCHAR,
             strength INTEGER,
@@ -150,8 +150,8 @@ class Player(BaseModel):
     @classmethod
     def duckdb_schema(cls):
         return """
-        CREATE TABLE players (
-            id INTEGER PRIMARY KEY,
+        CREATE TABLE IF NOT EXISTS elements (
+            id INTEGER,
             first_name VARCHAR,
             second_name VARCHAR,
             web_name VARCHAR,
@@ -266,7 +266,7 @@ class Event(BaseModel):
     @classmethod
     def duckdb_schema(cls):
         return """
-        CREATE TABLE events (
+        CREATE TABLE IF NOT EXISTS events (
         id INTEGER,
         gameweek VARCHAR,
         average_fplmanager_score INTEGER,
@@ -382,12 +382,12 @@ class Fixture(BaseModel):
     @classmethod
     def duckdb_schema(cls):
         return """
-        CREATE TABLE fixtures (
+        CREATE TABLE IF NOT EXISTS fixtures (
             code INTEGER,
             event INTEGER,
             finished BOOLEAN,
             finished_provisional BOOLEAN,
-            id INTEGER PRIMARY KEY,
+            id INTEGER,
             kickoff_time TIMESTAMP,
             minutes INTEGER,
             provisional_start_time BOOLEAN,
