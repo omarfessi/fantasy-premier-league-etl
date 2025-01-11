@@ -1,0 +1,9 @@
+version: 2
+
+macros:
+  - name: flatten_stats_from_raw_fixtures
+    description: A macro to unnest the stats column from the raw fixtures table
+    arguments:
+      - name: stat_type
+        type: string
+        description: The name of the stat to unnest
