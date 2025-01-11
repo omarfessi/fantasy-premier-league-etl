@@ -258,3 +258,40 @@ models:
         description: The value of the stat
       - name: player_id
         description: The unique identifier for each player
+        
+  - name: events_cleansed
+    identifier: events_cleansed
+    description: '{{ doc("events_cleansed") }}'
+    columns:
+      - name : event_id
+        description: Unique identifier for the event.
+      - name: gameweek
+        description : The gameweek number for the event.
+      - name: average_fplmanager_score
+        description: The average score of FPL managers for the event.
+      - name: highest_fplmanager_score
+        description: The highest score achieved by an FPL manager for the event.
+      - name: highest_scoring_fplmanager_id
+        description: The ID of the FPL manager with the highest score for the event.
+      - name: fplmanagers_count
+        description: The total number of FPL managers participating in the event.
+      - name: data_checked
+        description: Boolean indicating if the data has been checked.
+      - name: event_date
+        description: The date of the event.
+      - name: chips_played
+        description: Information about chips played during the event.
+      - name: most_selected_player_id
+        description: The ID of the most selected player for the event.
+      - name: most_transferred_player_in_id
+        description: The ID of the player most transferred in for the event.
+      - name: most_captained_player_id
+        description: The ID of the most captained player for the event.
+      - name: most_vice_captained_player_id
+        description : The ID of the most vice-captained player for the event.
+      - name: top_player_info
+        description: Information about the top player for the event.
+      - name: transfers_made
+        description: The number of transfers made during the event.
+      - name: ingestion_time
+        description: The time when the data was ingested.
