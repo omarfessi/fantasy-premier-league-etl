@@ -1,0 +1,22 @@
+version: 2
+
+snapshots:
+  - name: players_snapshot
+    relation: ref('players_cleansed')
+    config:
+      unique_key: player_id
+      strategy: check
+      check_cols: ['player_position', 'player_team_id', 'player_current_cost']
+      hard_deletes: 'new_record'
+      # docs: 
+      #     node_color: yellow
+
+  - name: teams_snapshot
+    relation: ref('teams_cleansed')
+    config:
+      unique_key: team_id
+      strategy: check
+      check_cols: ['team_strength', 'strength_overall_home', 'strength_overall_away', 'strength_attack_home', 'strength_attack_away', 'strength_defence_home', 'strength_defence_away']
+      hard_deletes: 'new_record'
+      # docs: 
+      #     node_color: blue
