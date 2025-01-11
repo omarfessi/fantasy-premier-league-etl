@@ -9,190 +9,190 @@ sources:
         description: raw_elements or raw_players data as it comes from the ingestion pipeline
         identifier: elements
         columns:
-        - name: id
-          description: Unique identifier for the record
-        - name: first_name
-          description: First name of the player
-        - name: second_name
-          description: Second name of the player
-        - name: web_name
-          description: Web name of the player
-        - name: position
-          description: Position of the player
-        - name: team_id
-          description: Identifier for the team
-        - name: cost
-          description: Cost of the player
-        - name: minutes
-          description: Minutes played by the player
-        - name: goals_scored
-          description: Goals scored by the player
-        - name: assists
-          description: Assists made by the player
-        - name: clean_sheets
-          description: Clean sheets by the player
-        - name: goals_conceded
-          description: Goals conceded by the player
-        - name: own_goals
-          description: Own goals by the player
-        - name: penalties_saved
-          description: Penalties saved by the player
-        - name: penalties_missed
-          description: Penalties missed by the player
-        - name: yellow_cards
-          description: Yellow cards received by the player
-        - name: red_cards
-          description: Red cards received by the player
-        - name: saves
-          description: Saves made by the player
-        - name: bonus
-          description: Bonus points received by the player
-        - name: bps
-          description: Bonus points system score
-        - name: influence
-          description: Influence score of the player
-        - name: creativity
-          description: Creativity score of the player
-        - name: threat
-          description: Threat score of the player
-        - name: ict_index
-          description: ICT index score of the player
-        - name: starts
-          description: Number of starts by the player
-        - name: now_cost_rank
-          description: Current cost rank of the player
-        - name: now_cost_rank_type
-          description: Type of current cost rank
-        - name: form_rank
-          description: Form rank of the player
-        - name: form_rank_type
-          description: Type of form rank
-        - name: points_per_game_rank
-          description: Points per game rank of the player
-        - name: points_per_game_rank_type
-          description: Type of points per game rank
-        - name: selected_rank
-          description: Selected rank of the player
-        - name: selected_rank_type
-          description: Type of selected rank
-        - name: selected_by_percent
-          description: Percentage of teams that selected the player
-        - name: total_points
-          description: Total points scored by the player
-        - name: transfers_in
-          description: Number of transfers in
-        - name: transfers_in_event
-          description: Number of transfers in for the event
-        - name: transfers_out
-          description: Number of transfers out
-        - name: transfers_out_event
-          description: Number of transfers out for the event
-        - name: ingestion_time
-          description: Time of data ingestion
+          - name: id
+            description: Unique identifier for the record
+          - name: first_name
+            description: First name of the player
+          - name: second_name
+            description: Second name of the player
+          - name: web_name
+            description: Web name of the player
+          - name: position
+            description: Position of the player
+          - name: team_id
+            description: Identifier for the team
+          - name: cost
+            description: Cost of the player
+          - name: minutes
+            description: Minutes played by the player
+          - name: goals_scored
+            description: Goals scored by the player
+          - name: assists
+            description: Assists made by the player
+          - name: clean_sheets
+            description: Clean sheets by the player
+          - name: goals_conceded
+            description: Goals conceded by the player
+          - name: own_goals
+            description: Own goals by the player
+          - name: penalties_saved
+            description: Penalties saved by the player
+          - name: penalties_missed
+            description: Penalties missed by the player
+          - name: yellow_cards
+            description: Yellow cards received by the player
+          - name: red_cards
+            description: Red cards received by the player
+          - name: saves
+            description: Saves made by the player
+          - name: bonus
+            description: Bonus points received by the player
+          - name: bps
+            description: Bonus points system score
+          - name: influence
+            description: Influence score of the player
+          - name: creativity
+            description: Creativity score of the player
+          - name: threat
+            description: Threat score of the player
+          - name: ict_index
+            description: ICT index score of the player
+          - name: starts
+            description: Number of starts by the player
+          - name: now_cost_rank
+            description: Current cost rank of the player
+          - name: now_cost_rank_type
+            description: Type of current cost rank
+          - name: form_rank
+            description: Form rank of the player
+          - name: form_rank_type
+            description: Type of form rank
+          - name: points_per_game_rank
+            description: Points per game rank of the player
+          - name: points_per_game_rank_type
+            description: Type of points per game rank
+          - name: selected_rank
+            description: Selected rank of the player
+          - name: selected_rank_type
+            description: Type of selected rank
+          - name: selected_by_percent
+            description: Percentage of teams that selected the player
+          - name: total_points
+            description: Total points scored by the player
+          - name: transfers_in
+            description: Number of transfers in
+          - name: transfers_in_event
+            description: Number of transfers in for the event
+          - name: transfers_out
+            description: Number of transfers out
+          - name: transfers_out_event
+            description: Number of transfers out for the event
+          - name: ingestion_time
+            description: Time of data ingestion
 
       - name: raw_teams
         description: raw teams data as it comes from the ingestion pipeline
         identifier: teams
         columns:
-        - name: id
-          description: Unique identifier for the team
-        - name: name
-          description: Name of the team
-        - name: short_name
-          description: Short name of the team
-        - name: strength
-          description: Overall strength of the team
-        - name: strength_overall_home
-          description: Overall strength of the team at home
-        - name: strength_overall_away
-          description: Overall strength of the team away
-        - name: strength_attack_home
-          description: Attack strength of the team at home
-        - name: strength_attack_away
-          description: Attack strength of the team away
-        - name: strength_defence_home
-          description: Defence strength of the team at home
-        - name: strength_defence_away
-          description: Defence strength of the team away
-        - name: ingestion_time
-          description: Time of data ingestion
-      
+          - name: id
+            description: Unique identifier for the team
+          - name: name
+            description: Name of the team
+          - name: short_name
+            description: Short name of the team
+          - name: strength
+            description: Overall strength of the team
+          - name: strength_overall_home
+            description: Overall strength of the team at home
+          - name: strength_overall_away
+            description: Overall strength of the team away
+          - name: strength_attack_home
+            description: Attack strength of the team at home
+          - name: strength_attack_away
+            description: Attack strength of the team away
+          - name: strength_defence_home
+            description: Defence strength of the team at home
+          - name: strength_defence_away
+            description: Defence strength of the team away
+          - name: ingestion_time
+            description: Time of data ingestion
+
       - name: raw_events
         description: raw events data as it comes from the ingestion pipeline
         identifier: events
         columns:
-        - name: id
-          description: Unique identifier for the event
-        - name: gameweek
-          description: Gameweek number
-        - name: average_fplmanager_score
-          description: Average FPL manager score
-        - name: highest_fplmanager_score
-          description: Highest FPL manager score
-        - name: highest_scoring_fplmanager_id
-          description: Highest scoring FPL manager id
-        - name: fplmanagers_count
-          description: Number of FPL managers
-        - name: data_checked
-          description: Data checked
-        - name: event_date
-          description: Event date
-        - name: chip_plays
-          description: Chip plays
-        - name: most_selected_player
-          description: Most selected player
-        - name: most_transferred_player_in
-          description: Most transferred player in
-        - name: top_player_info
-          description: Top player info
-        - name: transfers_made
-          description: Transfers made
-        - name: most_captained
-          description: Most captained player
-        - name: most_vice_captained
-          description: Most vice captained player
-        - name: ingestion_time
-          description: Time of data ingestion
-      
+          - name: id
+            description: Unique identifier for the event
+          - name: gameweek
+            description: Gameweek number
+          - name: average_fplmanager_score
+            description: Average FPL manager score
+          - name: highest_fplmanager_score
+            description: Highest FPL manager score
+          - name: highest_scoring_fplmanager_id
+            description: Highest scoring FPL manager id
+          - name: fplmanagers_count
+            description: Number of FPL managers
+          - name: data_checked
+            description: Data checked
+          - name: event_date
+            description: Event date
+          - name: chip_plays
+            description: Chip plays
+          - name: most_selected_player
+            description: Most selected player
+          - name: most_transferred_player_in
+            description: Most transferred player in
+          - name: top_player_info
+            description: Top player info
+          - name: transfers_made
+            description: Transfers made
+          - name: most_captained
+            description: Most captained player
+          - name: most_vice_captained
+            description: Most vice captained player
+          - name: ingestion_time
+            description: Time of data ingestion
+
       - name: raw_fixtures
         description: raw fixtures data as it comes from the ingestion pipeline
         identifier: fixtures
         columns:
-        - name: code
-          description: Unique identifier for the fixture
-        - name: event
-          description: Event number
-        - name: finished
-          description: Whether the fixture has finished
-        - name: finished_provisional
-          description: Whether the fixture has finished provisionally
-        - name: id
-          description: Unique identifier for the fixture
-        - name: kickoff_time
-          description: Kickoff time
-        - name: minutes
-          description: Minutes played
-        - name: provisional_start_time
-          description: Provisional start time
-        - name: started
-          description: Whether the fixture has started
-        - name: team_a
-          description: Team playing Away
-        - name: team_a_score
-          description: Team A score
-        - name: team_h
-          description: Team playing Home
-        - name: team_h_score
-          description: Team H score
-        - name: stats
-          description: Fixture stats STRUCT(identifier VARCHAR, a STRUCT("value" INTEGER, element INTEGER)[], h STRUCT("value" INTEGER, element INTEGER)[])[]
-        - name: team_h_difficulty
-          description: Team H difficulty
-        - name: team_a_difficulty
-          description: Team A difficulty
-        - name: ingestion_time
-          description: Time of data ingestion
-          
+          - name: code
+            description: Unique identifier for the fixture
+          - name: event
+            description: Event number
+          - name: finished
+            description: Whether the fixture has finished
+          - name: finished_provisional
+            description: Whether the fixture has finished provisionally
+          - name: id
+            description: Unique identifier for the fixture
+          - name: kickoff_time
+            description: Kickoff time
+          - name: minutes
+            description: Minutes played
+          - name: provisional_start_time
+            description: Provisional start time
+          - name: started
+            description: Whether the fixture has started
+          - name: team_a
+            description: Team playing Away
+          - name: team_a_score
+            description: Team A score
+          - name: team_h
+            description: Team playing Home
+          - name: team_h_score
+            description: Team H score
+          - name: stats
+            description: Fixture stats STRUCT(identifier VARCHAR, a STRUCT("value" INTEGER, element INTEGER)[], h STRUCT("value" INTEGER, element INTEGER)[])[]
+          - name: team_h_difficulty
+            description: Team H difficulty
+          - name: team_a_difficulty
+            description: Team A difficulty
+          - name: ingestion_time
+            description: Time of data ingestion
+
 models:
   - name: players_cleansed
     identifier: players_cleansed
@@ -216,7 +216,6 @@ models:
       - name: ingestion_time
         description: The time when the data was ingested
 
-
   - name: teams_cleansed
     identifier: teams_cleansed
     description: Renaming columns
@@ -231,7 +230,7 @@ models:
       - name: team_strength
         description: strength of the team
       - name: strength_overall_home
-        description: overall home strength 
+        description: overall home strength
       - name: strength_overall_away
         description: overall away strength
       - name: strength_attack_home
@@ -239,8 +238,23 @@ models:
       - name: strength_attack_away
         description: away attack strength
       - name: strength_defence_home
-        description: home defence strength    
+        description: home defence strength
       - name: strength_defence_away
         description: away defence strength
       - name: ingestion_time
         description: The time when the data was ingested
+
+  - name: stack_vertically_flat_stats
+    identifier: stack_vertically_flat_stats
+    description: stack_vertically_flat_stats, to relax <stat_type>_stats models code
+    columns:
+      - name: code
+        description: The unique identifier for each match
+      - name: game_week
+        description: The game week of the match
+      - name: kickoff_time
+        description: The time of the match
+      - name: stat_value
+        description: The value of the stat
+      - name: player_id
+        description: The unique identifier for each player
