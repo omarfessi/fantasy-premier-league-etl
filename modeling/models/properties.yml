@@ -243,21 +243,6 @@ models:
         description: away defence strength
       - name: ingestion_time
         description: The time when the data was ingested
-
-  - name: stack_vertically_flat_stats
-    identifier: stack_vertically_flat_stats
-    description: stack_vertically_flat_stats, to relax <stat_type>_stats models code
-    columns:
-      - name: code
-        description: The unique identifier for each match
-      - name: game_week
-        description: The game week of the match
-      - name: kickoff_time
-        description: The time of the match
-      - name: stat_value
-        description: The value of the stat
-      - name: player_id
-        description: The unique identifier for each player
         
   - name: events_cleansed
     identifier: events_cleansed
