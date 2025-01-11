@@ -1,3 +1,9 @@
+{{
+    config(
+        materialized='incremental',
+        unique_key=['event_id']
+    )
+}}
 SELECT 
     id AS event_id,
     gameweek,
@@ -17,4 +23,10 @@ SELECT
     ingestion_time
 FROM
 {{ source('landing', 'raw_events') }}
-WHERE current_date > event_date AND data_checked = true
+WHERE data_checked = true
+
+{% if is_incremental() %}
+
+AND ingestion_time >= (SELECT coalesce(max(ingestion_time),'1900-01-01') FROM {{ this }} )
+
+{% endif %}
