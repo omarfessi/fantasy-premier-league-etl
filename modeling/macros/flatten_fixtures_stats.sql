@@ -1,9 +1,9 @@
 {% macro flatten_stats_from_raw_fixtures(stat_type) %}
     WITH flat_raw_fx_stats AS (
         SELECT
-            code,
-            event AS gameweek,
-            kickoff_time,
+            code AS game_id,
+            event AS gameweek_id,
+            kickoff_time AS game_kickoff_time,
             CASE 
                 WHEN flatten_stats.unnest.h IS NOT NULL THEN UNNEST(flatten_stats.unnest.h) 
             END AS h_player_stats,
@@ -16,9 +16,9 @@
     )
 
     SELECT 
-        code,
-        gameweek,
-        kickoff_time, 
+        game_id,
+        gameweek_id,
+        game_kickoff_time, 
         h_player_stats.value as stat_value, 
         h_player_stats.element as player_id,
         'home' AS side
@@ -26,9 +26,9 @@
     WHERE h_player_stats.value not null
     UNION ALL
     SELECT 
-        code,
-        gameweek,
-        kickoff_time, 
+        game_id,
+        gameweek_id,
+        game_kickoff_time, 
         a_player_stats.value as stat_value, 
         a_player_stats.element as player_id,
         'away' AS side
