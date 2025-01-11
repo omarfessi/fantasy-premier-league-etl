@@ -219,7 +219,7 @@ models:
 
   - name: teams_cleansed
     identifier: teams_cleansed
-    description: Renaming teams data 
+    description: Renaming columns
 
     columns:
       - name: team_id
