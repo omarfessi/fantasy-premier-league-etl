@@ -213,6 +213,8 @@ models:
         description: The unique identifier for the team the player belongs to
       - name: player_current_cost
         description: The cost of the player in the game
+      - name: player_total_points
+        description: The total points scored by the player
       - name: ingestion_time
         description: The time when the data was ingested
 

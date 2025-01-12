@@ -6,7 +6,7 @@ snapshots:
     config:
       unique_key: player_id
       strategy: check
-      check_cols: ['player_position', 'player_team_id', 'player_current_cost']
+      check_cols: ['player_position', 'player_team_id', 'player_current_cost', 'player_total_points']
       hard_deletes: 'new_record'
       # docs: 
       #     node_color: yellow

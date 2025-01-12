@@ -6,6 +6,7 @@ SELECT
     position as player_position,
     team_id as player_team_id,
     cost as player_current_cost,
+    total_points as player_total_points,
     ingestion_time
 FROM {{source('landing', 'raw_elements')}}
 
