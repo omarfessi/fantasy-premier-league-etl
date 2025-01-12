@@ -280,3 +280,115 @@ models:
         description: The number of transfers made during the event.
       - name: ingestion_time
         description: The time when the data was ingested.
+  - name: assists_stats
+    identifier: assists_stats
+    description: This model provides statistics on assists made by players during games.
+    columns:
+      - name : game_id
+        description: The game's identifier
+      - name: gameweek_id
+        description: The gameweek's identifier
+      - name: game_kickoff_time
+        description: The game's kickoff time
+      - name: stat_value
+        description: The number of assists made by the player
+      - name: player_id
+        description: The player's identifier
+      - name: side
+        description: Fixture's side (home or away)
+      - name: ingestion_time
+        description: The time when the data was ingested
+  - name: own_goals_stats
+    identifier: own_goals_stats
+    description: This model provides statistics on own goals scored by players during games.
+    columns:
+      - name: game_id
+        description: The game's identifier
+      - name: gameweek_id
+        description: The gameweek's identifier
+      - name: game_kickoff_time
+        description: The game's kickoff time
+      - name: stat_value
+        description: The number of own goals scored by the player
+      - name: player_id
+        description: The player's identifier
+      - name: side
+        description: Fixture's side (home or away)
+      - name: ingestion_time
+        description: The time when the data was ingested
+
+  - name: penalties_missed_stats
+    identifier: penalties_missed_stats
+    description: This model provides statistics on penalties missed scored by players during games.
+    columns:
+      - name: game_id
+        description: The game's identifier
+      - name: gameweek_id
+        description: The gameweek's identifier
+      - name: game_kickoff_time
+        description: The game's kickoff time
+      - name: stat_value
+        description: The number of penalties missed by the player
+      - name: player_id
+        description: The player's identifier
+      - name: side
+        description: Fixture's side (home or away)
+      - name: ingestion_time
+        description: The time when the data was ingested
+
+  - name: penalties_saved_stats
+    identifier: penalties_saved_stats
+    description: This model provides statistics on penalties saved scored by players during games.
+    columns:
+      - name: game_id
+        description: The game's identifier
+      - name: gameweek_id
+        description: The gameweek's identifier
+      - name: game_kickoff_time
+        description: The game's kickoff time
+      - name: stat_value
+        description: The number of penalties saved by the player
+      - name: player_id
+        description: The player's identifier
+      - name: side
+        description: Fixture's side (home or away)
+      - name: ingestion_time
+        description: The time when the data was ingested
+
+  - name: red_cards_stats
+    identifier: red_cards_stats
+    description: This model provides statistics on red cards by players during games.
+    columns:
+      - name: game_id
+        description: The game's identifier
+      - name: gameweek_id
+        description: The gameweek's identifier
+      - name: game_kickoff_time
+        description: The game's kickoff time
+      - name: stat_value
+        description: The number of red cards received by the player
+      - name: player_id
+        description: The player's identifier
+      - name: side
+        description: Fixture's side (home or away)
+      - name: ingestion_time
+        description: The time when the data was ingested
+
+  - name: yellow_cards_stats
+    identifier: yellow_cards_stats
+    description: This model provides statistics on yellow cards by players during games.
+    columns:
+      - name: game_id
+        description: The game's identifier
+      - name: gameweek_id
+        description: The gameweek's identifier
+      - name: game_kickoff_time
+        description: The game's kickoff time
+      - name: stat_value
+        description: The number of yellow cards received by the player
+      - name: player_id
+        description: The player's identifier
+      - name: side
+        description: Fixture's side (home or away)
+      - name: ingestion_time
+        description: The time when the data was ingested
