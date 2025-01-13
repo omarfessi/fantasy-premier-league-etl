@@ -15,7 +15,8 @@ players.player_name,
 stack_vertically_stats.side,
 stack_vertically_stats.stat_value,
 points.value AS unit_value,
-points.value * stat_value AS total_points
+points.value * stat_value AS total_points,
+stack_vertically_stats.ingestion_time AS ingestion_time
 FROM stack_vertically_stats
 JOIN {{ref('players_cleansed')}} players ON players.player_id = stack_vertically_stats.player_id
 JOIN {{ref('stat_points')}} points ON points.position = players.player_position
@@ -23,6 +24,6 @@ WHERE stat = 'goals_scored'
 
 {% if is_incremental() %}
 
-where ingestion_time >= (SELECT coalesce(max(ingestion_time),'1900-01-01') FROM {{ this }} )
+AND stack_vertically_stats.ingestion_time >= (SELECT coalesce(max(ingestion_time),'1900-01-01') FROM {{ this }} )
 
 {% endif %}
