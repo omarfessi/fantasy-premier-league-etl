@@ -1,5 +1,0 @@
-INSERT INTO players (id, first_name, second_name, web_name, position, team_id) VALUES
-{% for row in data -%}
-    ({{ row['id'] }}, '{{ row['first_name'].replace("'", "''") }}', '{{ row['second_name'].replace("'", "''") }}', '{{ row['web_name'].replace("'", "''") }}', {{ row['position'] }}, {{ row['team_id'] }}){% if not loop.last %},{% endif %}
-{% endfor -%}
-ON CONFLICT (id) DO NOTHING

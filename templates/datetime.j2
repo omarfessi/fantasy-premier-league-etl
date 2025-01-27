@@ -1,5 +1,0 @@
-INSERT INTO datetime (dt_as_timestamp, hour, day, week, month, year, dayofweek) VALUES
-{% for row in data -%}
-    (TIMESTAMP '{{row}}', EXTRACT(HOUR FROM TIMESTAMP '{{row}}'), EXTRACT(DAY FROM TIMESTAMP '{{row}}'), EXTRACT(WEEK FROM TIMESTAMP '{{row}}'), EXTRACT(MONTH FROM TIMESTAMP '{{row}}'), EXTRACT(YEAR FROM TIMESTAMP '{{row}}'), EXTRACT(DOW FROM TIMESTAMP '{{row}}')){% if not loop.last %},{% endif %}
-{% endfor -%}
-ON CONFLICT (dt_as_timestamp) DO NOTHING

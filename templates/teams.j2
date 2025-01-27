@@ -1,5 +1,0 @@
-INSERT INTO teams (id, name, short_name) VALUES
-{% for row in data -%}
-    ({{ row['id'] }}, '{{ row['name'].replace("'", "''") }}', '{{ row['short_name'] }}'){% if not loop.last %},{% endif %}
-{% endfor -%}
-ON CONFLICT (id) DO NOTHING
