@@ -1,8 +1,11 @@
 import logging
 import os
+import tempfile
 
 import duckdb
+import google.cloud.storage
 import pyarrow as pa
+import pyarrow.parquet as pq
 import requests
 from pydantic import ValidationError
 
@@ -57,6 +60,34 @@ def extract_and_validate_entities(entities: list[dict], model_type: ModelUnion) 
     return data
 
 
+def upload_to_gcs(
+    client: google.cloud.storage.client.Client,
+    bucket_name: str,
+    destination_blob_name: str,
+    table: pa.Table,
+) -> None:
+    """
+    Upload a PyArrow Table as a Parquet file to a GCS bucket.
+
+    Args:
+        bucket_name (str): The name of the GCS bucket.
+        destination_blob_name (str): The destination path within the bucket.
+        table (pa.Table): The PyArrow Table to upload.
+    """
+    bucket = client.bucket(bucket_name)
+    blob = bucket.blob(destination_blob_name)
+
+    # Create a temporary file for the Parquet data
+    with tempfile.NamedTemporaryFile(suffix=".parquet", delete=True) as temp_file:
+        # Write PyArrow Table to Parquet file
+        pq.write_table(table, temp_file.name)
+        logging.info(f"Parquet file created at {temp_file.name}")
+
+        # Upload the file to GCS
+        blob.upload_from_filename(temp_file.name)
+        logging.info(f"File {destination_blob_name} uploaded to GCS bucket {bucket_name}.")
+
+
 class TableLoadingBuffer:
     def __init__(
         self,
@@ -69,7 +100,7 @@ class TableLoadingBuffer:
         self.destination = destination
         self.dryrun = dryrun
         self.chunk_size = chunk_size
-        self.conn = self.initialize_connection(destination)
+        # self.conn = self.initialize_connection(destination)
 
     def initialize_connection(self, destination: str) -> duckdb.DuckDBPyConnection:
         if destination == "md":
