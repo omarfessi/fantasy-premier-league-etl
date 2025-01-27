@@ -3,7 +3,7 @@ sources:
     tables:
       - name: raw_elements
         description: raw_elements or raw_players data as it comes from the ingestion pipeline
-        identifier: elements
+        identifier: raw_players
         columns:
           - name: id
             description: Unique identifier for the record
@@ -88,7 +88,7 @@ sources:
 
       - name: raw_teams
         description: raw teams data as it comes from the ingestion pipeline
-        identifier: teams
+        identifier: raw_teams
         columns:
           - name: id
             description: Unique identifier for the team
@@ -115,7 +115,7 @@ sources:
 
       - name: raw_events
         description: raw events data as it comes from the ingestion pipeline
-        identifier: events
+        identifier: raw_events
         columns:
           - name: id
             description: Unique identifier for the event
@@ -152,7 +152,7 @@ sources:
 
       - name: raw_fixtures
         description: raw fixtures data as it comes from the ingestion pipeline
-        identifier: fixtures
+        identifier: raw_fixtures
         columns:
           - name: code
             description: Unique identifier for the fixture
