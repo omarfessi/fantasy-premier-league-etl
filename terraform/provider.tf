@@ -3,4 +3,4 @@ provider "google" {
   region  = local.region
 }
 
-provider "random" {}  # For random_id generation
+provider "random" {} # For random_id generation
