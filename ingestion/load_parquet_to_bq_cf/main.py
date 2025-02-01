@@ -18,6 +18,7 @@ def process_gcs_events(cloud_event):
     client = bigquery.Client()
     job_config = bigquery.LoadJobConfig(
         source_format=bigquery.SourceFormat.PARQUET,
+        write_disposition=bigquery.WriteDisposition.WRITE_TRUNCATE,
     )
     if (
         file_name.startswith("fixtures")
