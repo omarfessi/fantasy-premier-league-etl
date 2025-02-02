@@ -10,3 +10,4 @@ package.json
 *.parquet
 .DS_Store
 *.db
+modeling/.user.yml
