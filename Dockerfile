@@ -3,5 +3,5 @@ WORKDIR /app
 COPY modeling/ .
 ENTRYPOINT ["dbt", "run", "--profiles-dir", ".", "--project-dir", "." ]
 
-# after building the image run 
+# after building the image run (docker build -t dbt-runner . )
 # docker run --rm --env-file .env -v ~/.config/gcloud:/root/.config/gcloud dbt-runner
