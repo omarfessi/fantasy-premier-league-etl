@@ -58,3 +58,18 @@ module "load_parquet_to_bq_cf_creation" {
   dependency               = module.gcf_service_account_creation_with_permissions
 
 }
+
+
+resource "google_cloud_run_v2_job" "dbt_modeling_job" {
+  name     = "dbt-modeling-job"
+  location = local.region
+  deletion_protection = false
+
+  template {
+    template {
+      containers {
+        image = "${local.region}-docker.pkg.dev/${local.project_id}/${local.repo_name}/${local.image_name}:${local.image_tag}"
+      }
+    }
+  }
+}
