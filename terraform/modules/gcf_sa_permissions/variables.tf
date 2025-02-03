@@ -1,9 +1,7 @@
 variable "project_id" {
   description = "The GCP project ID"
   type        = string
-  default     = "fantasy-premier-league-447918"
 }
-
 variable "service_account_name" {
   description = "used for both the CF and eventarc trigger to load parquet files to BQ upon GCS notification"
   type        = string

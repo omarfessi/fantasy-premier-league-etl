@@ -1,10 +1,10 @@
 #prepare the name of the bucket that will hold the source code of the cloud function
 resource "random_id" "bucket_prefix" {
-  byte_length = 8
+  byte_length = 4
 }
 # Create a bucket to store the source code for the cloud function
 resource "google_storage_bucket" "gcf_source_bucket" {
-  name          = "${random_id.bucket_prefix.hex}-gcf-source-bucket"
+  name          = "fantasy-gcf-source-bucket-${random_id.bucket_prefix.hex}"
   project       = var.project_id
   location      = var.region
   storage_class = "STANDARD"
