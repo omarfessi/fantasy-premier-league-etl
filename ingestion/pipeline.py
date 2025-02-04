@@ -42,9 +42,7 @@ def process_entity(entity_name: str, url: str, model: ModelUnion) -> pa.Table | 
 
 if __name__ == "__main__":
     today = date.today().strftime("%Y_%m_%d")
-    # today = (date.today() + timedelta(days=1)).strftime("%Y_%m_%d")
-    # buffer = TableLoadingBuffer()
-    client = storage.Client(project="fantasy-premier-league-447918")
+    client = storage.Client(project="fantasy-open-analytics")
     bucket_name = "fantasy-raw-data"
 
     for entity in [
@@ -56,14 +54,3 @@ if __name__ == "__main__":
         table = process_entity(*entity[0:3])
         if table:
             upload_to_gcs(client, bucket_name, entity[-1], table)
-            # logging.info(f"Writing {entity[0]} to file...")
-            # pq.write_table(table, entity[-1])
-            # logging.info(f"Loading {entity[0]} to database...")
-            # buffer.insert_table(entity[0], table, entity[2].duckdb_schema())
-
-            # buffer.upload_to_gcs(
-            #     bucket_name="gs://fantasy-raw-data",
-            #     destination_blob_name=entity[-1],
-            #     table=table,
-            # )
-    # buffer.close_connection()

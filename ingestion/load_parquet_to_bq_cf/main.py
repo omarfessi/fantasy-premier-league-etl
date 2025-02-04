@@ -26,7 +26,7 @@ def process_gcs_events(cloud_event):
         or file_name.startswith("events")
         or file_name.startswith("teams")
     ):
-        table_id = f"fantasy-premier-league-447918.fantasy_premier_league.raw_{file_name.split('_')[0]}"
+        table_id = f"fantasy-open-analytics.fantasy_premier_league.raw_{file_name.split('_')[0]}"
         uri = f"gs://fantasy-raw-data/{file_name}"
         load_job = client.load_table_from_uri(uri, table_id, job_config=job_config)
         load_job.result()  # Waits for the job to complete.
