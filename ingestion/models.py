@@ -327,43 +327,43 @@ class Fixture(BaseModel):
     def pyarrow_schema(cls):
         return pa.schema(
             [
-                ("code", pa.int32()),
-                ("event", pa.int32()),
-                ("finished", pa.bool_()),
-                ("finished_provisional", pa.bool_()),
-                ("id", pa.int32()),
-                ("kickoff_time", pa.timestamp("ms")),
-                ("minutes", pa.int32()),
-                ("provisional_start_time", pa.bool_()),
-                ("started", pa.bool_()),
-                ("team_a", pa.int32()),
-                ("team_a_score", pa.int32()),
-                ("team_h", pa.int32()),
-                ("team_h_score", pa.int32()),
-                (
+                pa.field("code", pa.int32()),
+                pa.field("event", pa.int32()),
+                pa.field("finished", pa.bool_()),
+                pa.field("finished_provisional", pa.bool_()),
+                pa.field("id", pa.int32()),
+                pa.field("kickoff_time", pa.timestamp("ms")),
+                pa.field("minutes", pa.int32()),
+                pa.field("provisional_start_time", pa.bool_()),
+                pa.field("started", pa.bool_()),
+                pa.field("team_a", pa.int32()),
+                pa.field("team_a_score", pa.int32()),
+                pa.field("team_h", pa.int32()),
+                pa.field("team_h_score", pa.int32()),
+                pa.field(
                     "stats",
                     pa.list_(
                         pa.struct(
                             [
-                                ("identifier", pa.string()),
-                                (
+                                pa.field("identifier", pa.string()),
+                                pa.field(
                                     "a",
                                     pa.list_(
                                         pa.struct(
                                             [
-                                                ("value", pa.int32()),
-                                                ("element", pa.int32()),
+                                                pa.field("value", pa.int32()),
+                                                pa.field("element", pa.int32()),
                                             ]
                                         )
                                     ),
                                 ),
-                                (
+                                pa.field(
                                     "h",
                                     pa.list_(
                                         pa.struct(
                                             [
-                                                ("value", pa.int32()),
-                                                ("element", pa.int32()),
+                                                pa.field("value", pa.int32()),
+                                                pa.field("element", pa.int32()),
                                             ]
                                         )
                                     ),
@@ -372,10 +372,10 @@ class Fixture(BaseModel):
                         )
                     ),
                 ),
-                ("team_h_difficulty", pa.int32()),
-                ("team_a_difficulty", pa.int32()),
-                ("pulse_id", pa.int32()),
-                ("ingestion_time", pa.date32()),
+                pa.field("team_h_difficulty", pa.int32()),
+                pa.field("team_a_difficulty", pa.int32()),
+                pa.field("pulse_id", pa.int32()),
+                pa.field("ingestion_time", pa.date32()),
             ]
         )
 
@@ -415,3 +415,22 @@ class Fixture(BaseModel):
 
 
 ModelUnion = Event | Team | Player | Fixture
+
+
+# Define the struct type for the statistics entries
+stats_struct = pa.struct(
+    [
+        pa.field("stat_id", pa.int64()),
+        pa.field("stat_name", pa.string()),
+        pa.field("stat_value", pa.string()),
+    ]
+)
+
+# Create the schema with id, name, and a list of statistics structs
+schema = pa.schema(
+    [
+        pa.field("id", pa.int64()),
+        pa.field("name", pa.string()),
+        pa.field("statistics", pa.list_(stats_struct)),
+    ]
+)
