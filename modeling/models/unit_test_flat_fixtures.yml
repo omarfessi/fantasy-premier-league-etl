@@ -1,0 +1,43 @@
+unit_tests:
+  - name: flat_fixtures_full_refresh_mode
+    model: flat_fixtures
+    overrides:
+      macros:
+        is_incremental: false 
+    given:
+      - input: source('fantasy_premier_league', 'raw_fixtures')
+        rows:
+          - code: 2444470
+            event: 1
+            kickoff_time: '2024-08-16 19:00:00.000000 UTC'
+            stats: | #be patient with the complex nested structure
+              STRUCT( #this is the stats column which is a struct
+                ARRAY[ #this is an array of structs called stats.list 
+                  STRUCT( #this is another struct which has one element called element
+                    STRUCT( #this is the element struct which has 3 elements
+                      "yellow_cards" AS identifier,
+                      STRUCT(
+                        ARRAY[
+                          STRUCT(STRUCT(1 AS value, 240 AS element) AS element),
+                          STRUCT(STRUCT(1 AS value, 241 AS element) AS element),
+                          STRUCT(STRUCT(1 AS value, 243 AS element) AS element)
+                        ] AS list
+                      ) AS a,
+                      STRUCT(
+                        ARRAY[
+                          STRUCT(STRUCT(1 AS value, 377 AS element) AS element),
+                          STRUCT(STRUCT(1 AS value, 382 AS element) AS element)
+                        ] AS list
+                      ) AS h
+                    ) AS element
+                  )
+                ] AS list
+              )
+            ingestion_time: '2025-02-06'
+    expect:
+      rows:
+        - {game_id: 2444470, gameweek_id: 1, game_kickoff_time: '2024-08-16 19:00:00.000000 UTC', identifier: yellow_cards, player_id: 240, value: 1, side: away, ingestion_time: '2025-02-06'}
+        - {game_id: 2444470, gameweek_id: 1, game_kickoff_time: '2024-08-16 19:00:00.000000 UTC', identifier: yellow_cards, player_id: 241, value: 1, side: away, ingestion_time: '2025-02-06'}
+        - {game_id: 2444470, gameweek_id: 1, game_kickoff_time: '2024-08-16 19:00:00.000000 UTC', identifier: yellow_cards, player_id: 243, value: 1, side: away, ingestion_time: '2025-02-06'}
+        - {game_id: 2444470, gameweek_id: 1, game_kickoff_time: '2024-08-16 19:00:00.000000 UTC', identifier: yellow_cards, player_id: 377, value: 1, side: home, ingestion_time: '2025-02-06'}
+        - {game_id: 2444470, gameweek_id: 1, game_kickoff_time: '2024-08-16 19:00:00.000000 UTC', identifier: yellow_cards, player_id: 382, value: 1, side: home, ingestion_time: '2025-02-06'}
