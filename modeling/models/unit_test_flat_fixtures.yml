@@ -3,9 +3,12 @@ unit_tests:
     model: flat_fixtures
     overrides:
       macros:
-        is_incremental: false 
+        is_incremental: false
+        dbt_utils.generate_surrogate_key: game_id || '-' || identifier || '-' || player_id
+        dbt.current_timestamp: TIMESTAMP('2025-02-07') 
     given:
       - input: source('fantasy_premier_league', 'raw_fixtures')
+      # relation `fantasy-open-analytics`.`fantasy_premier_league`.`raw_fixtures` needs to exist prior to running the test
         rows:
           - code: 2444470
             event: 1
@@ -36,8 +39,61 @@ unit_tests:
             ingestion_time: '2025-02-06'
     expect:
       rows:
-        - {game_id: 2444470, gameweek_id: 1, game_kickoff_time: '2024-08-16 19:00:00.000000 UTC', identifier: yellow_cards, player_id: 240, value: 1, side: away, ingestion_time: '2025-02-06'}
-        - {game_id: 2444470, gameweek_id: 1, game_kickoff_time: '2024-08-16 19:00:00.000000 UTC', identifier: yellow_cards, player_id: 241, value: 1, side: away, ingestion_time: '2025-02-06'}
-        - {game_id: 2444470, gameweek_id: 1, game_kickoff_time: '2024-08-16 19:00:00.000000 UTC', identifier: yellow_cards, player_id: 243, value: 1, side: away, ingestion_time: '2025-02-06'}
-        - {game_id: 2444470, gameweek_id: 1, game_kickoff_time: '2024-08-16 19:00:00.000000 UTC', identifier: yellow_cards, player_id: 377, value: 1, side: home, ingestion_time: '2025-02-06'}
-        - {game_id: 2444470, gameweek_id: 1, game_kickoff_time: '2024-08-16 19:00:00.000000 UTC', identifier: yellow_cards, player_id: 382, value: 1, side: home, ingestion_time: '2025-02-06'}
+        - {game_id: 2444470, gameweek_id: 1, game_kickoff_time: '2024-08-16 19:00:00.000000 UTC', identifier: yellow_cards, player_id: 240, value: 1, side: away, stat_by_player_by_game_id: 2444470-yellow_cards-240, last_updated: '2025-02-07 00:00:00+00:00'}
+        - {game_id: 2444470, gameweek_id: 1, game_kickoff_time: '2024-08-16 19:00:00.000000 UTC', identifier: yellow_cards, player_id: 241, value: 1, side: away, stat_by_player_by_game_id: 2444470-yellow_cards-241, last_updated: '2025-02-07 00:00:00+00:00'}
+        - {game_id: 2444470, gameweek_id: 1, game_kickoff_time: '2024-08-16 19:00:00.000000 UTC', identifier: yellow_cards, player_id: 243, value: 1, side: away, stat_by_player_by_game_id: 2444470-yellow_cards-243, last_updated: '2025-02-07 00:00:00+00:00'}
+        - {game_id: 2444470, gameweek_id: 1, game_kickoff_time: '2024-08-16 19:00:00.000000 UTC', identifier: yellow_cards, player_id: 377, value: 1, side: home, stat_by_player_by_game_id: 2444470-yellow_cards-377, last_updated: '2025-02-07 00:00:00+00:00'}
+        - {game_id: 2444470, gameweek_id: 1, game_kickoff_time: '2024-08-16 19:00:00.000000 UTC', identifier: yellow_cards, player_id: 382, value: 1, side: home, stat_by_player_by_game_id: 2444470-yellow_cards-382, last_updated: '2025-02-07 00:00:00+00:00'}
+
+  - name: flat_fixtures_incremental_mode
+    model: flat_fixtures #relation `fantasy-open-analytics`.`fantasy_premier_league`.`flat_fixtures` needs to exist prior to running the test
+    overrides:
+      macros:
+        is_incremental: true 
+        dbt_utils.generate_surrogate_key: game_id || '-' || identifier || '-' || player_id
+        dbt.current_timestamp: TIMESTAMP('2025-02-07')
+    given:
+      - input: source('fantasy_premier_league', 'raw_fixtures')
+        rows:
+          - code: 2444470
+            event: 1
+            kickoff_time: '2024-08-16 19:00:00.000000 UTC'
+            stats: | #be patient with the complex nested structure
+              STRUCT( #this is the stats column which is a struct
+                ARRAY[ #this is an array of structs called stats.list 
+                  STRUCT( #this is another struct which has one element called element
+                    STRUCT( #this is the element struct which has 3 elements
+                      "yellow_cards" AS identifier,
+                      STRUCT(
+                        ARRAY[
+                          STRUCT(STRUCT(1 AS value, 240 AS element) AS element),
+                          STRUCT(STRUCT(1 AS value, 241 AS element) AS element),
+                          STRUCT(STRUCT(2 AS value, 243 AS element) AS element),
+                          STRUCT(STRUCT(1 AS value, 1000 AS element) AS element)
+                        ] AS list
+                      ) AS a,
+                      STRUCT(
+                        ARRAY[
+                          STRUCT(STRUCT(1 AS value, 377 AS element) AS element),
+                          STRUCT(STRUCT(1 AS value, 382 AS element) AS element)
+                          
+                        ] AS list
+                      ) AS h
+                    ) AS element
+                  )
+                ] AS list
+              )
+            ingestion_time: '2025-02-06'
+      - input: this 
+          # contents of current my_incremental_model
+        rows:
+          - {game_id: 2444470, gameweek_id: 1, game_kickoff_time: '2024-08-16 19:00:00.000000 UTC', identifier: yellow_cards, player_id: 240, value: 1, side: away, stat_by_player_by_game_id: 2444470-yellow_cards-240, last_updated: '2025-02-08 23:02:40.997970 UTC'}
+          - {game_id: 2444470, gameweek_id: 1, game_kickoff_time: '2024-08-16 19:00:00.000000 UTC', identifier: yellow_cards, player_id: 241, value: 1, side: away, stat_by_player_by_game_id: 2444470-yellow_cards-241, last_updated: '2025-02-08 23:02:40.997970 UTC'}
+          - {game_id: 2444470, gameweek_id: 1, game_kickoff_time: '2024-08-16 19:00:00.000000 UTC', identifier: yellow_cards, player_id: 243, value: 1, side: away, stat_by_player_by_game_id: 2444470-yellow_cards-243, last_updated: '2025-02-08 23:02:40.997970 UTC'}
+          - {game_id: 2444470, gameweek_id: 1, game_kickoff_time: '2024-08-16 19:00:00.000000 UTC', identifier: yellow_cards, player_id: 377, value: 1, side: home, stat_by_player_by_game_id: 2444470-yellow_cards-377, last_updated: '2025-02-08 23:02:40.997970 UTC'}
+          - {game_id: 2444470, gameweek_id: 1, game_kickoff_time: '2024-08-16 19:00:00.000000 UTC', identifier: yellow_cards, player_id: 382, value: 1, side: home, stat_by_player_by_game_id: 2444470-yellow_cards-382, last_updated: '2025-02-08 23:02:40.997970 UTC'}
+       
+    expect:
+      rows:
+        - {game_id: 2444470, gameweek_id: 1, game_kickoff_time: '2024-08-16 19:00:00.000000 UTC', identifier: yellow_cards, player_id: 243, value: 2, side: away,  stat_by_player_by_game_id: 2444470-yellow_cards-243, last_updated: '2025-02-07 00:00:00+00:00'}
+        - {game_id: 2444470, gameweek_id: 1, game_kickoff_time: '2024-08-16 19:00:00.000000 UTC', identifier: yellow_cards, player_id: 1000, value: 1, side: away,  stat_by_player_by_game_id: 2444470-yellow_cards-1000, last_updated: '2025-02-07 00:00:00+00:00'}
