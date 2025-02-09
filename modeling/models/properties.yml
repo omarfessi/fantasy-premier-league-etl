@@ -7,6 +7,9 @@ sources:
         columns:
           - name: id
             description: Unique identifier for the record
+            tests:
+              - unique
+              - not_null
           - name: first_name
             description: First name of the player
           - name: second_name
@@ -15,6 +18,10 @@ sources:
             description: Web name of the player
           - name: position
             description: Position of the player
+            tests:
+              - accepted_values: 
+                  values: [1, 2, 3, 4]
+                  quote: false
           - name: team_id
             description: Identifier for the team
           - name: cost
@@ -188,3 +195,42 @@ sources:
             description: Team A difficulty
           - name: ingestion_time
             description: Time of data ingestion
+
+models:
+  - name: flat_fixtures
+    identifier: flat_fixtures
+    description: flatten the raw_fixtures data to make it easier to query
+
+    columns:
+      - name: game_id
+        description: The unique identifier for the game
+        tests:
+          - not_null
+      - name: gameweek_id
+        description: The unique identifier for the gameweek
+        tests:
+          - not_null
+      - name: game_kickoff_time
+        description: The time when the game is started
+      - name: identifier
+        description: The stat type identifier
+        tests:
+          - accepted_values: 
+              values: ['assists', 'bonus', 'goals_scored', 'yellow_cards', 'penalties_missed', 'saves', 'penalties_saved', 'red_cards', 'own_goals', 'mng_underdog_draw', 'bps', 'mng_underdog_win']
+      - name: player_id
+        description: The identifier for the player
+        tests:
+          - not_null
+      - name: value
+        description: The value of the stat
+      - name: side
+        description: The game's side
+        tests:
+          - accepted_values: 
+              values: ['home', 'away']
+      - name: stat_by_player_by_game_id
+        description: The total points scored by the player
+        tests:
+          - unique
+      - name: last_updated
+        description: The time when the data is inserted/updated
