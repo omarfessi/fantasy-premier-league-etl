@@ -19,8 +19,6 @@ def process_entity(entity_name: str, url: str, model: ModelUnion) -> pa.Table | 
         entity_name (str): Name of the entity for logging.
         url (str): API endpoint to fetch data from.
         model (BaseModel): Pydantic model for validation.
-        schema_method (callable): Method to generate PyArrow schema.
-        filename (str): File name for saving data.
     """
     logging.info(f"Processing {entity_name}...")
     data = call_api(url).json()
