@@ -2,7 +2,7 @@ logs/
 __pycache__
 plugins/__pycache__
 plugins/operators/__pycache__
-.fpl/
+.fpl_env/
 ingestion/__pycache__
 settings.json
 package-lock.json
