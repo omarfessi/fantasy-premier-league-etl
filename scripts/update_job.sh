@@ -1,0 +1,1 @@
+gcloud run jobs update dbt-modeling-job --region=europe-west1
