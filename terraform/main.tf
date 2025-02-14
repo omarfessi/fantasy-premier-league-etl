@@ -61,7 +61,7 @@ module "load_parquet_to_bq_cf_creation" {
   project_id               = local.project_id
   region                   = local.region
   function_name            = "load-parquet-to-bq"
-  gcf_local_source_path    = "../ingestion/load_parquet_to_bq_cf"
+  gcf_local_source_path    = "../load_parquet_to_bq_cf"
   gcf_zipped_source_path   = "./tmp/function.zip"
   entry_point              = "process_gcs_events"
   service_account_name     = module.gcf_service_account_creation_with_permissions.service_account_email
