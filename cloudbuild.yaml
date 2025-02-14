@@ -3,6 +3,7 @@ steps:
     args:
     - build
     - "--tag=${_REGION}-docker.pkg.dev/${_PROJECT_ID}/${_REPO_NAME}/${_IMAGE_NAME}:${_IMAGE_TAG}"
-    - .
+    - "${_BUILD_CONTEXT}"  # Use the dynamic build path
+
 images:
   - "${_REGION}-docker.pkg.dev/${_PROJECT_ID}/${_REPO_NAME}/${_IMAGE_NAME}:${_IMAGE_TAG}"

@@ -147,3 +147,33 @@ resource "google_cloud_run_v2_job" "dbt_modeling_job" {
     }
   }
 }
+
+## Ingestion job
+
+resource "google_service_account" "ingestion_gcrj_sa" {
+  account_id   = "ingestion-gcrj-sa"
+  display_name = "Service Account used by the ingestion job"
+}
+
+resource "google_storage_bucket_iam_member" "ingestion_gcs_sa_writer" {
+  bucket = google_storage_bucket.fantasy_raw_data.name
+  role = "roles/storage.objectUser"
+  member = "serviceAccount:${google_service_account.ingestion_gcrj_sa.email}"
+}
+
+
+resource "google_cloud_run_v2_job" "ingestion_job" {
+  name                = "ingestion-job"
+  location            = local.region
+  deletion_protection = false
+  depends_on          = [ google_project_service.services]
+
+  template {
+    template {
+      containers {
+        image = "${local.region}-docker.pkg.dev/${local.project_id}/${local.repo_name}/ingestion:${local.image_tag}"
+      }
+      service_account = google_service_account.ingestion_gcrj_sa.email
+    }
+  }
+}
