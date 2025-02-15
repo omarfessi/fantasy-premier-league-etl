@@ -3,7 +3,7 @@ sources:
     tables:
       - name: raw_elements
         description: raw_elements or raw_players data as it comes from the ingestion pipeline
-        identifier: raw_players
+        identifier: raw_elements
         columns:
           - name: id
             description: Unique identifier for the record
