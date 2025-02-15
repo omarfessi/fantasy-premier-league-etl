@@ -22,7 +22,7 @@ def process_gcs_events(cloud_event):
     )
     if (
         file_name.startswith("fixtures")
-        or file_name.startswith("players")
+        or file_name.startswith("elements")
         or file_name.startswith("events")
         or file_name.startswith("teams")
     ):
@@ -31,4 +31,4 @@ def process_gcs_events(cloud_event):
         load_job = client.load_table_from_uri(uri, table_id, job_config=job_config)
         load_job.result()  # Waits for the job to complete.
         destination_table = client.get_table(table_id)
-        print(f"Loaded {destination_table.num_rows} rows.")
+        print(f"Loaded {destination_table.num_rows} rows into {table_id}.")

@@ -44,11 +44,11 @@ if __name__ == "__main__":
     bucket_name = "fantasy-raw-data"
 
     for entity in [
-        ("fixtures", FIXTURES_URL, Fixture, f"fixtures_{today}.parquet"),
-        ("elements", STATIC_URL, Player, f"players_{today}.parquet"),
-        ("events", STATIC_URL, Event, f"events_{today}.parquet"),
-        ("teams", STATIC_URL, Team, f"teams_{today}.parquet"),
+        ("fixtures", FIXTURES_URL, Fixture),
+        ("elements", STATIC_URL, Player),
+        ("events", STATIC_URL, Event),
+        ("teams", STATIC_URL, Team),
     ]:
         table = process_entity(*entity[0:3])
         if table:
-            upload_to_gcs(client, bucket_name, entity[-1], table)
+            upload_to_gcs(client, bucket_name, f"{entity[0]}_{today}.parquet", table)
