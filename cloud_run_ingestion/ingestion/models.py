@@ -7,6 +7,7 @@ from pydantic import BaseModel, BeforeValidator, ConfigDict, Field
 
 class Team(BaseModel):
     id: int
+    code: int
     name: str
     short_name: str
     strength: int
@@ -23,6 +24,7 @@ class Team(BaseModel):
         return pa.schema(
             [
                 ("id", pa.int32()),
+                ("code", pa.int32()),
                 ("name", pa.string()),
                 ("short_name", pa.string()),
                 ("strength", pa.int32()),
@@ -41,6 +43,7 @@ class Team(BaseModel):
         return """
         CREATE TABLE IF NOT EXISTS teams (
             id INTEGER,
+            code INTEGER,
             name VARCHAR,
             short_name VARCHAR,
             strength INTEGER,

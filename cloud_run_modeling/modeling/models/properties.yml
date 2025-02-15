@@ -99,6 +99,8 @@ sources:
         columns:
           - name: id
             description: Unique identifier for the team
+          - name: code
+            description: Code for the team
           - name: name
             description: Name of the team
           - name: short_name
@@ -234,3 +236,71 @@ models:
           - unique
       - name: last_updated
         description: The time when the data is inserted/updated
+
+  - name: players_cleansed
+    identifier: players_cleansed
+    description: Renaming columns
+    columns:
+      - name: player_id
+        description: The unique identifier for each player
+        tests:
+          - not_null
+          - unique
+      - name: player_first_name
+        description: The first name of the player
+      - name: player_second_name
+        description: The second name of the player
+      - name: player_name
+        description: The web name of the player
+      - name: player_position
+        description: The position of the player on the field
+        tests:
+          - accepted_values: 
+              values: [1, 2, 3, 4]
+              quote: false
+      - name: player_team_code
+        description: The unique code for the team the player belongs to
+        tests:
+          - relationships:
+              to: ref('teams_cleansed')
+              field: team_code
+      - name: player_current_cost
+        description: The cost of the player in the game
+      - name: player_total_points
+        description: The total points scored by the player
+      - name: ingestion_time
+        description: The time when the data was ingested
+
+  - name: teams_cleansed
+    identifier: teams_cleansed
+    description: Renaming columns
+
+    columns:
+      - name: team_id
+        description: The unique identifier for each team
+        tests:
+          - not_null
+          - unique
+      - name: team_code
+        description: The code for the team
+
+      - name: team_name
+        description: name of the team
+      - name: team_short_name
+        description: name of the team
+      - name: team_strength
+        description: strength of the team
+      - name: strength_overall_home
+        description: overall home strength
+      - name: strength_overall_away
+        description: overall away strength
+      - name: strength_attack_home
+        description: home attack strength
+      - name: strength_attack_away
+        description: away attack strength
+      - name: strength_defence_home
+        description: home defence strength
+      - name: strength_defence_away
+        description: away defence strength
+      - name: ingestion_time
+        description: The time when the data was ingested
