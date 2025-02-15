@@ -3,11 +3,6 @@ version: 2
 seeds:
   - name: stat_points
     description: This seed telles how the total players points are calculated under the Fantasy Premier League rules.
-    config:
-      column_types:
-        stat: varchar(2)
-        position: int
-        value: int
     delimiter: ","
     columns:
       - name: stat
