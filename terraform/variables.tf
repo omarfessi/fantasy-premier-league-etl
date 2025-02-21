@@ -9,7 +9,7 @@ variable "sandbox_build" {
   description = "The name of the bucket to be created"
   type        = string
   default     = "fantasy-sandbox-build"
-  
+
 }
 
 variable "fpl_dataset_name" {
@@ -29,7 +29,8 @@ variable "services" {
     "cloudfunctions.googleapis.com",
     "cloudbuild.googleapis.com",
     "eventarc.googleapis.com",
-  "run.googleapis.com"]
+    "run.googleapis.com",
+  "composer.googleapis.com"]
 }
 
 variable "project_level_roles_for_gcf_sa" {
