@@ -20,7 +20,7 @@ sources:
             description: Position of the player
             tests:
               - accepted_values: 
-                  values: [1, 2, 3, 4]
+                  values: [1, 2, 3, 4, 5]
                   quote: false
           - name: team_id
             description: Identifier for the team
