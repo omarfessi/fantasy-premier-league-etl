@@ -256,7 +256,7 @@ models:
         description: The position of the player on the field
         tests:
           - accepted_values: 
-              values: [1, 2, 3, 4]
+              values: [1, 2, 3, 4, 5]
               quote: false
       - name: player_team_code
         description: The unique code for the team the player belongs to

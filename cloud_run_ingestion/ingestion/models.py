@@ -62,7 +62,7 @@ class Player(BaseModel):
     first_name: str
     second_name: str
     web_name: str
-    position: Literal[1, 2, 3, 4] = Field(alias="element_type")
+    position: Literal[1, 2, 3, 4, 5] = Field(alias="element_type")
     team_id: int = Field(alias="team_code")
     cost: Annotated[
         float,
@@ -203,7 +203,7 @@ class TopElementInfo(BaseModel):
 
 
 class ChipPlayed(BaseModel):
-    chip_name: Literal["bboost", "3xc", "freehit", "wildcard"]
+    chip_name: Literal["bboost", "3xc", "freehit", "wildcard", "manager"]
     num_played: int
 
 
