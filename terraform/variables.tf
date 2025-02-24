@@ -30,7 +30,8 @@ variable "services" {
     "cloudbuild.googleapis.com",
     "eventarc.googleapis.com",
     "run.googleapis.com",
-  "composer.googleapis.com"]
+    "cloudscheduler.googleapis.com",
+  ]
 }
 
 variable "project_level_roles_for_gcf_sa" {

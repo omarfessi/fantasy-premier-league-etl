@@ -2,7 +2,7 @@
 
 # Ensure IMAGE_NAME is set
 if [ -z "$1" ]; then
-  echo "Please provide the IMAGE_NAME as the first argument, e.g. ./scripts/cloud_build.sh ingestion"
+  echo "Please provide the IMAGE_NAME as the first argument, e.g. ./scripts/cloud_build.sh modeling-dbt/ingestion"
   exit 1
 fi
 

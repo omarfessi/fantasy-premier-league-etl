@@ -142,6 +142,15 @@ resource "google_cloud_run_v2_job" "dbt_modeling_job" {
     template {
       containers {
         image = "${local.region}-docker.pkg.dev/${local.project_id}/${local.repo_name}/${local.image_name}:${local.image_tag}"
+        env {
+          name  = "DBT_GCP_PROJECT"
+          value = "fantasy-open-analytics"
+        }
+
+        env {
+          name  = "DBT_TARGET_DATASET"
+          value = "fantasy_premier_league"
+        }
       }
       service_account = google_service_account.dbt_modeling_gcrj_sa.email
     }
@@ -181,11 +190,11 @@ resource "google_cloud_run_v2_job" "ingestion_job" {
 
 ##Composer related resources
 
-resource "google_service_account" "orchestrator_gcc_sa" {
-  provider     = google-beta
-  account_id   = "orchestrator-gcc-sa"
-  display_name = "Service Account used by composer to run DAGs"
-}
+# resource "google_service_account" "orchestrator_gcc_sa" {
+#   provider     = google-beta
+#   account_id   = "orchestrator-gcc-sa"
+#   display_name = "Service Account used by composer to run DAGs"
+# }
 
 # resource "google_project_iam_member" "composer_worker" {
 #   provider = google-beta
@@ -195,40 +204,8 @@ resource "google_service_account" "orchestrator_gcc_sa" {
 #   role = "roles/composer.worker"
 # }
 
-# data "google_project" "project" {
-# }
-
-
-# resource "google_service_account_iam_member" "default_sa_composer_service_agent_v2ext_binding" {
-#   provider           = google-beta
-#   service_account_id = google_service_account.orchestrator_gcc_sa.name
-#   role               = "roles/composer.ServiceAgentV2Ext"
-#   member             = "serviceAccount:service-746117364827@cloudcomposer-accounts.iam.gserviceaccount.com"
-# }
-
-# resource "google_composer_environment" "composer2-fpl-environment" {
-#   provider   = google-beta
-#   project    = local.project_id
-#   name       = "fpl-main-environement-v2"
-#   region     = "europe-west2"
-#   depends_on = [google_service_account_iam_member.default_sa_composer_service_agent_v2ext_binding]
-
-
-#   config {
-#     environment_size = "ENVIRONMENT_SIZE_SMALL"
-
-#     software_config {
-#       image_version = "composer-2.11.2-airflow-2.9.3"
-#     }
-
-
-#     node_config {
-#       service_account = google_service_account.orchestrator_gcc_sa.email
-#     }
-
-
-#   }
-# }
+data "google_project" "project" {
+}
 
 
 # resource "google_composer_environment" "composer-fpl-environment" {
@@ -249,8 +226,78 @@ resource "google_service_account" "orchestrator_gcc_sa" {
 # }
 
 
-# resource "google_project_iam_member" "oussama_editor" {
-#   project = local.project_id
-#   role    = "roles/editor"
-#   member  = "user:oussamamissaoui201@gmail.com"
-# }
+
+## Cloud Scheduler related resources
+
+resource "google_service_account" "cloud_scheduler_sa" {
+  provider     = google-beta
+  project = local.project_id
+  account_id   = "cloud-scheduler-sa"
+  display_name = "Service Account used by Cloud Scheduler to trigger Cloud Run jobs"
+}
+
+resource "google_project_iam_member" "cloud_scheduler_admin" {
+  provider = google-beta
+  project  = local.project_id
+  member   = format("serviceAccount:%s", google_service_account.cloud_scheduler_sa.email)
+  // Role for Public IP environments
+  role = "roles/cloudscheduler.admin"
+}
+
+resource "google_project_iam_member" "run_invoker" {
+  provider = google-beta
+  project  = local.project_id
+  member   = format("serviceAccount:%s", google_service_account.cloud_scheduler_sa.email)
+  // Role for Public IP environments
+  role = "roles/run.invoker"
+}
+
+resource "google_cloud_scheduler_job" "ingestion-job" {
+  provider         = google-beta
+  name             = "ingestion-schedule-job"
+  description      = "Trigger the ingestion job every day"
+  schedule         = "0 22 * * *"
+  attempt_deadline = "320s"
+  region           = local.region
+  project          = local.project_id
+
+  retry_config {
+    retry_count = 2
+  }
+
+  http_target {
+    http_method = "POST"
+    uri         = "https://${local.region}-run.googleapis.com/apis/run.googleapis.com/v1/namespaces/${data.google_project.project.number}/jobs/${google_cloud_run_v2_job.ingestion_job.name}:run"
+
+    oauth_token {
+      service_account_email = google_service_account.cloud_scheduler_sa.email
+    }
+  }
+
+  depends_on = [google_project_service.services]
+}
+
+resource "google_cloud_scheduler_job" "modeling-job" {
+  provider         = google-beta
+  name             = "modeling-schedule-job"
+  description      = "Trigger the modeling job every day"
+  schedule         = "30 22 * * *"
+  attempt_deadline = "320s"
+  region           = local.region
+  project          = local.project_id
+
+  retry_config {
+    retry_count = 2
+  }
+
+  http_target {
+    http_method = "POST"
+    uri         = "https://${local.region}-run.googleapis.com/apis/run.googleapis.com/v1/namespaces/${data.google_project.project.number}/jobs/${google_cloud_run_v2_job.dbt_modeling_job.name}:run"
+
+    oauth_token {
+      service_account_email = google_service_account.cloud_scheduler_sa.email
+    }
+  }
+
+  depends_on = [google_project_service.services]
+}
