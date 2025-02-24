@@ -2,7 +2,7 @@ from datetime import UTC, datetime
 
 import pytest
 
-from ingestion.models import Fixture, Stat, StatEntry
+from cloud_run_ingestion.ingestion.models import Fixture, Stat, StatEntry
 
 
 @pytest.fixture

@@ -1,8 +1,8 @@
 from datetime import date
 import pyarrow.parquet as pq
 
-from ingestion.models import Fixture
-from ingestion.pipeline import process_entity
+from cloud_run_ingestion.ingestion.models import Fixture
+from cloud_run_ingestion.ingestion.pipeline import process_entity
 
 
 class TestProcessEntity:
@@ -15,12 +15,12 @@ class TestProcessEntity:
         model = Fixture
 
         # Mock API response
-        mock_call_api = mocker.patch("ingestion.pipeline.call_api")
+        mock_call_api = mocker.patch("cloud_run_ingestion.ingestion.pipeline.call_api")
         mock_call_api.return_value.json.return_value = valid_fixtures_raw_data  # Mocked raw data as it is not important here as it has been already tested
 
         # Mock extract_and_validate_entities, it has been already tested
         mock_extract_and_validate = mocker.patch(
-            "ingestion.pipeline.extract_and_validate_entities"
+            "cloud_run_ingestion.ingestion.pipeline.extract_and_validate_entities"
         )
         mock_extract_and_validate.return_value = validated_fixtures
 
@@ -40,7 +40,7 @@ class TestProcessEntity:
         model = Fixture
 
         # Mock API response
-        mock_call_api = mocker.patch("ingestion.pipeline.call_api")
+        mock_call_api = mocker.patch("cloud_run_ingestion.ingestion.pipeline.call_api")
         mock_call_api.return_value.json.return_value = {
             "wrong_key": [
                 {"id": 1, "name": "Fixture 1"}
@@ -62,14 +62,14 @@ class TestProcessEntity:
         url = "http://mock-api.com/fixtures"
         model = Fixture
         # Mock API response
-        mock_call_api = mocker.patch("ingestion.pipeline.call_api")
+        mock_call_api = mocker.patch("cloud_run_ingestion.ingestion.pipeline.call_api")
         mock_call_api.return_value.json.return_value = {
             "fixtures": [{"id": 1, "name": "Fixture 1"}]
             # Mocked raw data, not important here as it has been already tested,
             # but fixtures key must be present to avoid KeyError
         }
         mock_extract_and_validate = mocker.patch(
-            "ingestion.pipeline.extract_and_validate_entities"
+            "cloud_run_ingestion.ingestion.pipeline.extract_and_validate_entities"
         )
         mock_extract_and_validate.return_value = []  # No data
 

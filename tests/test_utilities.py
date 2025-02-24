@@ -4,8 +4,11 @@ from unittest.mock import patch
 import pytest
 import requests
 
-from ingestion.models import Fixture
-from ingestion.utilities import call_api, extract_and_validate_entities
+from cloud_run_ingestion.ingestion.models import Fixture
+from cloud_run_ingestion.ingestion.utilities import (
+    call_api,
+    extract_and_validate_entities,
+)
 
 
 def test_call_api_success():
