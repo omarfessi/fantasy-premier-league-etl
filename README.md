@@ -11,6 +11,8 @@
 This project is an Extract, Load, Transform (although a set of transformation/validation is applied before loading data) pipeline designed to fetch and process data from the Fantasy Premier League (FPL) API. 
 The data will some day serve data visualisation tool.
 
+![Architecture Diagram ](diagram.png?raw=true "Diagram")
+
 ## Features
 - **Data Extraction**: Fetches data from the FPL API.
 - **Data Transformation**: Cleans and processes raw data into a structured format using DBT.
