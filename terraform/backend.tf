@@ -3,9 +3,9 @@ terraform {
     bucket = "tf-state-fpl"
     prefix = "terraform/state"
   }
-#   backend "local" {
-#     path = "terraform.tfstate"
-#   }
+  #   backend "local" {
+  #     path = "terraform.tfstate"
+  #   }
 }
 
 resource "google_storage_bucket" "tf-state-fpl" {
