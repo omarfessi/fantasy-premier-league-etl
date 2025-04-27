@@ -256,7 +256,7 @@ resource "google_cloud_scheduler_job" "ingestion-job" {
   provider         = google-beta
   name             = "ingestion-schedule-job"
   description      = "Trigger the ingestion job every day"
-  schedule         = "0 22 * * *"
+  schedule         = "0 12 * * 1"
   attempt_deadline = "320s"
   region           = local.region
   project          = local.project_id
@@ -281,7 +281,7 @@ resource "google_cloud_scheduler_job" "modeling-job" {
   provider         = google-beta
   name             = "modeling-schedule-job"
   description      = "Trigger the modeling job every day"
-  schedule         = "30 22 * * *"
+  schedule         = "30 12 * * 1"
   attempt_deadline = "320s"
   region           = local.region
   project          = local.project_id
